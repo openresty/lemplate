@@ -1,3 +1,5 @@
+**WARNING** This is still under development and is not usable yet. Check back later.
+
 # SYNOPSIS
 
     var data = Ajax.get('url/data.json');
