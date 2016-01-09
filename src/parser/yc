@@ -18,7 +18,7 @@
 #========================================================================
 
 : ${GRAMMAR:="Parser.yp"}
-# : ${OUTPUT:="../lib/Jemplate/Grammar.pm"}
+# : ${OUTPUT:="../lib/Lemplate/Grammar.pm"}
 : ${OUTPUT:="Grammar.pm"}
 : ${TEMPLATE:="Grammar.pm.skel"}
 

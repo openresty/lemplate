@@ -1,4 +1,4 @@
-package Jemplate::Runtime::Compact;
+package Lemplate::Runtime::Compact;
 use strict;
 use warnings;
 
@@ -85,17 +85,17 @@ __END__
 
 =head1 NAME
 
-Jemplate::Runtime - Perl Module containing the Jemplate JavaScript Runtime
+Lemplate::Runtime - Perl Module containing the Lemplate JavaScript Runtime
 
 =head1 SYNOPSIS
 
-    use Jemplate::Runtime;
-    print Jemplate::Runtime->main;
+    use Lemplate::Runtime;
+    print Lemplate::Runtime->main;
 
 =head1 DESCRIPTION
 
-This module is auto-generated and used internally by Jemplate. It
-contains subroutines that simply return various parts of the Jemplate
+This module is auto-generated and used internally by Lemplate. It
+contains subroutines that simply return various parts of the Lemplate
 JavaScript Runtime code.
 
 =head1 METHODS

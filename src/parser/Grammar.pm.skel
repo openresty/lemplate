@@ -1,6 +1,6 @@
 #============================================================= -*-Perl-*-
 #
-# Jemplate::Grammar
+# Lemplate::Grammar
 #
 # DESCRIPTION
 #   Grammar file for the Template Toolkit language containing token
@@ -26,11 +26,11 @@
 # file by running the parser/yc script.  You only need to do this if 
 # you have modified the grammar in the parser/Parser.yp file and need
 # to-recompile it.  See the README in the 'parser' directory for more
-# information (sub-directory of the Jemplate distribution).
+# information (sub-directory of the Lemplate distribution).
 #
 #========================================================================
 
-package Jemplate::Grammar;
+package Lemplate::Grammar;
 
 require 5.004;
 

@@ -34,12 +34,12 @@ sub guts {
         Template::Grammar
         Template::Directive
         Template::Parser
-        Jemplate::Directive
-        Jemplate::Grammar
-        Jemplate::Parser
-        Jemplate::Runtime
-        Jemplate::Runtime::Compact
-        Jemplate
+        Lemplate::Directive
+        Lemplate::Grammar
+        Lemplate::Parser
+        Lemplate::Runtime
+        Lemplate::Runtime::Compact
+        Lemplate
     )) {
         $output .= get_module($_);
     }
@@ -48,7 +48,7 @@ sub guts {
 
 sub disable_libs {
     return <<'...';
-# This is the standalone Jemplate compiler.
+# This is the standalone Lemplate compiler.
 #
 # All you need is this program and the program called `perl`. You don't need
 # to install any Perl modules.
@@ -56,12 +56,12 @@ sub disable_libs {
 # If you downloaded this program from the internet, don't forget to put it in
 # your path and make sure it is executable. Like this:
 #
-#     mv jemplate /usr/local/bin/
-#     chmod +x /usr/local/bin/jemplate
+#     mv lemplate /usr/local/bin/
+#     chmod +x /usr/local/bin/lemplate
 #
 # Try this command to make sure it works:
 #
-#     jemplate --help
+#     lemplate --help
 
 use Config;
 BEGIN {

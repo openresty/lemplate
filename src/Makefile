@@ -2,15 +2,12 @@
 
 JEMPLATE_SCRIPT=../bin/lemplate
 JEMPLATE_STANDALONE_SCRIPT=../lemplate
-GRAMMAR_MODULE=../lib/Jemplate/Grammar.pm
-RUNTIME_MODULE=../lib/Jemplate/Runtime.pm
-RUNTIME_COMPACT_MODULE=../lib/Jemplate/Runtime/Compact.pm
+GRAMMAR_MODULE=../lib/Lemplate/Grammar.pm
+RUNTIME_MODULE=../lib/Lemplate/Runtime.pm
+RUNTIME_COMPACT_MODULE=../lib/Lemplate/Runtime/Compact.pm
 JEMPLATE_MODULES=$(GRAMMAR_MODULE) $(RUNTIME_MODULE) $(RUNTIME_COMPACT_MODULE)
 
-all: js $(JEMPLATE_STANDALONE_SCRIPT)
-
-js:
-	$(MAKE) -C js
+all: $(JEMPLATE_STANDALONE_SCRIPT)
 
 $(JEMPLATE_STANDALONE_SCRIPT): $(JEMPLATE_MODULES) _force
 	./bin/make-standalone-script $(JEMPLATE_SCRIPT) > $@
@@ -21,10 +18,10 @@ $(GRAMMAR_MODULE): parser _force
 	mv parser/Grammar.pm $@
 	rm parser/Parser.output
 
-$(RUNTIME_MODULE): lib/Jemplate/Runtime.pm _force
+$(RUNTIME_MODULE): lib/Lemplate/Runtime.pm _force
 	bin/tpage $< > $@
 
-$(RUNTIME_COMPACT_MODULE): lib/Jemplate/Runtime/Compact.pm _force
+$(RUNTIME_COMPACT_MODULE): lib/Lemplate/Runtime/Compact.pm _force
 	bin/tpage $< > $@
 
 _force:
