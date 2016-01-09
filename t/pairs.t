@@ -6,12 +6,12 @@ BEGIN {
 
 plan qw/no_plan/;
 
-use Jemplate;
-use Jemplate::Runtime;
+use Lemplate;
+use Lemplate::Runtime;
 
 use JavaScript::V8x::TestMoreish;
 
-my $jemplate = Jemplate->new;
+my $jemplate = Lemplate->new;
 my @templates;
 push @templates, $jemplate->compile_template_content( <<_END_, 't0' );
 Hello, World.
@@ -27,11 +27,11 @@ push @templates, $jemplate->compile_template_content( <<_END_, 't2' );
 [% END %]
 _END_
 
-test_js_eval( Jemplate::Runtime->kernel );
+test_js_eval( Lemplate::Runtime->kernel );
 test_js_eval( join "\n", @templates, "1;" );
 
 test_js <<'_END_';
-result = Jemplate.process( 't1', { hash: { c: 1, a: 2, b: 3 } } );
+result = Lemplate.process( 't1', { hash: { c: 1, a: 2, b: 3 } } );
 like( result, /a = 2\s+b = 3\s+c = 1/ )
 _END_
 

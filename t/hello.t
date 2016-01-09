@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 1;
+use t::TestLemplate tests => 1;
 
 filters { 'tt' => 'parse' };
 # no_diff;
@@ -11,7 +11,7 @@ __END__
 Hello [% name %], and good day!
 --- js
 function(context) {
-    if (! context) throw('Jemplate function called without context\n');
+    if (! context) throw('Lemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 

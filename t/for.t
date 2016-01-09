@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 1;
+use t::TestLemplate tests => 1;
 
 filters { 'tt' => 'parse_lite' };
 # no_diff;
@@ -23,7 +23,7 @@ output += 'Top\n';
 // FOREACH 
 (function() {
     var list = stash.get('list');
-    list = new Jemplate.Iterator(list);
+    list = new Lemplate.Iterator(list);
     var retval = list.get_first();
     var value = retval[0];
     var done = retval[1];

@@ -1,7 +1,7 @@
 # ToDo:
 # - Use TT:Simple in Makefiles
 
-package Jemplate;
+package Lemplate;
 use strict;
 use warnings;
 use Template 2.14;
@@ -9,20 +9,20 @@ use Getopt::Long;
 
 # VERSION
 
-use Jemplate::Parser;
+use Lemplate::Parser;
 
 #-------------------------------------------------------------------------------
 sub usage {
     <<'...';
 Usage:
 
-    jemplate --runtime [runtime-opt]
+    lemplate --runtime [runtime-opt]
 
-    jemplate --compile [compile-opt] <template-list>
+    lemplate --compile [compile-opt] <template-list>
 
-    jemplate --runtime [runtime-opt] --compile [compile-opt] <template-list>
+    lemplate --runtime [runtime-opt] --compile [compile-opt] <template-list>
 
-    jemplate --list <template-list>
+    lemplate --list <template-list>
 
 Where "--runtime" and "runtime-opt" can include:
 
@@ -67,7 +67,7 @@ Where "compile-opt" can include:
     --exclude
 
 For more information use:
-    perldoc jemplate
+    perldoc lemplate
 ...
 }
 
@@ -76,15 +76,15 @@ sub main {
 
     my @argv = @_;
 
-    my ($template_options, $jemplate_options) = get_options(@argv);
-    my ($runtime, $compile, $list) = @$jemplate_options{qw/runtime compile list/};
+    my ($template_options, $lemplate_options) = get_options(@argv);
+    my ($runtime, $compile, $list) = @$lemplate_options{qw/runtime compile list/};
 
     if ($runtime) {
-        print runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
+        print runtime_source_code(@$lemplate_options{qw/runtime ajax json xhr xxx compact/});
         return unless $compile;
     }
 
-    my $templates = make_file_list($jemplate_options->{exclude}, @argv);
+    my $templates = make_file_list($lemplate_options->{exclude}, @argv);
     print_usage_and_exit() unless @$templates;
 
     if ($list) {
@@ -95,12 +95,12 @@ sub main {
     }
 
     if ($compile) {
-        my $jemplate = Jemplate->new(%$template_options);
-        print STDOUT $jemplate->_preamble;
+        my $lemplate = Lemplate->new(%$template_options);
+        print STDOUT $lemplate->_preamble;
         foreach my $template (@$templates) {
             my $content = slurp($template->{full});
             if ($content) {
-                print STDOUT $jemplate->compile_template_content(
+                print STDOUT $lemplate->compile_template_content(
                     $content,
                     $template->{short},
                 );
@@ -268,14 +268,14 @@ sub print_usage_and_exit {
 }
 
 sub runtime_source_code {
-    require Jemplate::Runtime;
-    require Jemplate::Runtime::Compact;
+    require Lemplate::Runtime;
+    require Lemplate::Runtime::Compact;
 
     unshift @_, "standard" unless @_;
 
     my ($runtime, $ajax, $json, $xhr, $xxx, $compact) = map { defined $_ ? lc $_ : "" } @_[0 .. 5];
 
-    my $Jemplate_Runtime = $compact ? "Jemplate::Runtime::Compact" : "Jemplate::Runtime";
+    my $Lemplate_Runtime = $compact ? "Lemplate::Runtime::Compact" : "Lemplate::Runtime";
 
     if ($runtime eq "standard") {
         $ajax ||= "xhr";
@@ -305,22 +305,22 @@ sub runtime_source_code {
 
     my @runtime;
 
-    push @runtime, $Jemplate_Runtime->kernel if $runtime;
+    push @runtime, $Lemplate_Runtime->kernel if $runtime;
 
-    push @runtime, $Jemplate_Runtime->json2 if $json =~ m/^json2?$/i;
+    push @runtime, $Lemplate_Runtime->json2 if $json =~ m/^json2?$/i;
 
-    push @runtime, $Jemplate_Runtime->ajax_xhr if $ajax eq "xhr";
-    push @runtime, $Jemplate_Runtime->ajax_jquery if $ajax eq "jquery";
-    push @runtime, $Jemplate_Runtime->ajax_yui if $ajax eq "yui";
+    push @runtime, $Lemplate_Runtime->ajax_xhr if $ajax eq "xhr";
+    push @runtime, $Lemplate_Runtime->ajax_jquery if $ajax eq "jquery";
+    push @runtime, $Lemplate_Runtime->ajax_yui if $ajax eq "yui";
 
-    push @runtime, $Jemplate_Runtime->json_json2 if $json =~ m/^json2?$/i;
-    push @runtime, $Jemplate_Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
-    push @runtime, $Jemplate_Runtime->json_yui if $json eq "yui";
+    push @runtime, $Lemplate_Runtime->json_json2 if $json =~ m/^json2?$/i;
+    push @runtime, $Lemplate_Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
+    push @runtime, $Lemplate_Runtime->json_yui if $json eq "yui";
 
-    push @runtime, $Jemplate_Runtime->xhr_ilinsky if $xhr eq "ilinsky";
-    push @runtime, $Jemplate_Runtime->xhr_gregory if $xhr eq "gregory";
+    push @runtime, $Lemplate_Runtime->xhr_ilinsky if $xhr eq "ilinsky";
+    push @runtime, $Lemplate_Runtime->xhr_gregory if $xhr eq "gregory";
 
-    push @runtime, $Jemplate_Runtime->xxx if $xxx;
+    push @runtime, $Lemplate_Runtime->xxx if $xxx;
 
     return join ";", @runtime;
 }
@@ -367,20 +367,20 @@ sub compile_template_files {
 }
 
 sub compile_template_content {
-    die "Invalid arguments in call to Jemplate->compile_template_content"
+    die "Invalid arguments in call to Lemplate->compile_template_content"
       unless @_ == 3;
     my ($self, $template_content, $template_name) = @_;
-    my $parser = Jemplate::Parser->new( ref($self) ? %$self : () );
+    my $parser = Lemplate::Parser->new( ref($self) ? %$self : () );
     my $parse_tree = $parser->parse(
         $template_content, {name => $template_name}
     ) or die $parser->error;
     my $output =
-        "Jemplate.templateMap['$template_name'] = " .
+        "Lemplate.templateMap['$template_name'] = " .
         $parse_tree->{BLOCK} .
         "\n";
     for my $function_name (sort keys %{$parse_tree->{DEFBLOCKS}}) {
         $output .=
-            "Jemplate.templateMap['$function_name'] = " .
+            "Lemplate.templateMap['$function_name'] = " .
             $parse_tree->{DEFBLOCKS}{$function_name} .
             "\n";
     }
@@ -390,20 +390,20 @@ sub compile_template_content {
 sub _preamble {
     return <<'...';
 /*
-   This JavaScript code was generated by Jemplate, the JavaScript
+   This JavaScript code was generated by Lemplate, the JavaScript
    Template Toolkit. Any changes made to this file will be lost the next
    time the templates are compiled.
 
    Copyright 2006-2014 - Ingy döt Net - All rights reserved.
 */
 
-var Jemplate;
+var Lemplate;
 if (typeof(exports) == 'object') {
-    Jemplate = require("jemplate").Jemplate;
+    Lemplate = require("lemplate").Lemplate;
 }
 
-if (typeof(Jemplate) == 'undefined')
-    throw('Jemplate.js must be loaded before any Jemplate template files');
+if (typeof(Lemplate) == 'undefined')
+    throw('Lemplate.js must be loaded before any Lemplate template files');
 
 ...
 }
@@ -416,57 +416,57 @@ __END__
 
 =head1 NAME
 
-Jemplate - JavaScript Templating with Template Toolkit
+Lemplate - JavaScript Templating with Template Toolkit
 
 =head1 NAME
 
-Jemplate - JavaScript Templating with Template Toolkit
+Lemplate - JavaScript Templating with Template Toolkit
 
 =head1 SYNOPSIS
 
     var data = Ajax.get('url/data.json');
     var elem = document.getElementById('some-div');
-    elem.innerHTML = Jemplate.process('my-template.html', data);
+    elem.innerHTML = Lemplate.process('my-template.html', data);
 
 or:
 
     var data = Ajax.get('url/data.json');
     var elem = document.getElementById('some-div');
-    Jemplate.process('my-template.html', data, elem);
+    Lemplate.process('my-template.html', data, elem);
 
 or simply:
 
-    Jemplate.process('my-template.html', 'url/data.json', '#some-div');
+    Lemplate.process('my-template.html', 'url/data.json', '#some-div');
 
 or, with jQuery.js:
 
     jQuery.getJSON("url/data.json", function(data) {
-        Jemplate.process('my-template.html', data, '#some-div');
+        Lemplate.process('my-template.html', data, '#some-div');
     });
 
 From the commandline:
 
-    jemplate --runtime --compile path/to/jemplate/directory/ > jemplate.js
+    lemplate --runtime --compile path/to/lemplate/directory/ > lemplate.js
 
 =head1 DESCRIPTION
 
-Jemplate is a templating framework for JavaScript that is built over
+Lemplate is a templating framework for JavaScript that is built over
 Perl's Template Toolkit (TT2).
 
-Jemplate parses TT2 templates using the TT2 Perl framework, but with a
+Lemplate parses TT2 templates using the TT2 Perl framework, but with a
 twist. Instead of compiling the templates into Perl code, it compiles
 them into JavaScript.
 
-Jemplate then provides a JavaScript runtime module for processing
+Lemplate then provides a JavaScript runtime module for processing
 the template code. Presto, we have full featured JavaScript
 templating language!
 
-Combined with JSON and xmlHttpRequest, Jemplate provides a really simple
+Combined with JSON and xmlHttpRequest, Lemplate provides a really simple
 and powerful way to do Ajax stuff.
 
 =head1 HOWTO
 
-Jemplate comes with a command line tool call C<jemplate> that you use to
+Lemplate comes with a command line tool call C<lemplate> that you use to
 precompile your templates into a JavaScript file. For example if you have
 a template directory called C<templates> that contains:
 
@@ -477,28 +477,28 @@ a template directory called C<templates> that contains:
 
 You might run this command:
 
-    > jemplate --compile template/* > js/jemplates.js
+    > lemplate --compile template/* > js/lemplates.js
 
 This will compile all the templates into one JavaScript file.
 
-You also need to generate the Jemplate runtime.
+You also need to generate the Lemplate runtime.
 
-    > jemplate --runtime > js/Jemplate.js
+    > lemplate --runtime > js/Lemplate.js
 
 Now all you need to do is include these two files in your HTML:
 
-    <script src="js/Jemplate.js" type="text/javascript"></script>
-    <script src="js/jemplates.js" type="text/javascript"></script>
+    <script src="js/Lemplate.js" type="text/javascript"></script>
+    <script src="js/lemplates.js" type="text/javascript"></script>
 
-Now you have Jemplate support for these templates in your HTML document.
+Now you have Lemplate support for these templates in your HTML document.
 
 =head1 PUBLIC API
 
-The Jemplate.js JavaScript runtime module has the following API method:
+The Lemplate.js JavaScript runtime module has the following API method:
 
 =over
 
-=item Jemplate.process(template-name, data, target);
+=item Lemplate.process(template-name, data, target);
 
 The C<template-name> is a string like C<'body.html'> that is the name of
 the top level template that you wish to process.
@@ -521,29 +521,29 @@ property is set to the template processing result.
 
 =back
 
-The Jemplate.pm Perl module has the following public class methods,
+The Lemplate.pm Perl module has the following public class methods,
 although you won't likely need to use them directly. Normally, you just
-use the C<jemplate> command line tool.
+use the C<lemplate> command line tool.
 
 =over
 
-=item Jemplate->compile_template_files(@template_file_paths);
+=item Lemplate->compile_template_files(@template_file_paths);
 
 Take a list of template file paths and compile them into a module of
 functions. Returns the text of the module.
 
-=item Jemplate->compile_template_content($content, $template_name);
+=item Lemplate->compile_template_content($content, $template_name);
 
 Compile one template whose content is in memory. You must provide a
 unique template name. Returns the JavaScript text result of the
 compilation.
 
-=item Jemplate->compile_module($module_path, \@template_file_paths);
+=item Lemplate->compile_module($module_path, \@template_file_paths);
 
 Similar to `compile_template_files`, but prints to result to the
 $module_path. Returns 1 if successful, undef if error.
 
-=item Jemplate->compile_module_cached($module_path, \@template_file_paths);
+=item Lemplate->compile_module_cached($module_path, \@template_file_paths);
 
 Similar to `compile_module`, but only compiles if one of the templates
 is newer than the module. Returns 1 if successful compile, 0 if no
@@ -553,7 +553,7 @@ compile due to cache, undef if error.
 
 =head1 AJAX AND JSON METHODS
 
-Jemplate comes with builtin Ajax and JSON support.
+Lemplate comes with builtin Ajax and JSON support.
 
 =over
 
@@ -583,10 +583,10 @@ Turns a JSON string into an object and returns the object.
 
 =head1 CURRENT SUPPORT
 
-The goal of Jemplate is to support all of the Template Toolkit features
+The goal of Lemplate is to support all of the Template Toolkit features
 that can possibly be supported.
 
-Jemplate now supports almost all the TT directives, including:
+Lemplate now supports almost all the TT directives, including:
 
   * Plain text
   * [% [GET] variable %]
@@ -641,13 +641,13 @@ All tests run 100% successful in the above browsers.
 =head1 DEVELOPMENT
 
 The bleeding edge code is available via Git at
-git://github.com/ingydotnet/jemplate.git
+git://github.com/ingydotnet/lemplate.git
 
 You can run the runtime tests directly from
-http://svn.jemplate.net/repo/trunk/tests/run/index.html or from the
+http://svn.lemplate.net/repo/trunk/tests/run/index.html or from the
 corresponding CPAN or JSAN directories.
 
-Jemplate development is being discussed at irc://irc.freenode.net/#jemplate
+Lemplate development is being discussed at irc://irc.freenode.net/#lemplate
 
 If you want a committer bit, just ask ingy on the irc channel.
 
@@ -664,7 +664,7 @@ Ingy döt Net <ingy@cpan.org>
 
 (Note: I had to list myself first so that this line would go into META.yml)
 
-Jemplate is truly a community authored project:
+Lemplate is truly a community authored project:
 
 Ingy döt Net <ingy@cpan.org>
 

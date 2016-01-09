@@ -1,16 +1,16 @@
-package t::TestJemplate;
+package t::TestLemplate;
 use lib 'inc';
 use Test::Base -Base;
 
-use Jemplate;
+use Lemplate;
 
-package t::TestJemplate::Filter;
+package t::TestLemplate::Filter;
 use base 'Test::Base::Filter';
 
 sub XXX() { require YAML; die YAML::Dump(@_) }
 
 sub parse {
-    my $parser = Jemplate::Parser->new;
+    my $parser = Lemplate::Parser->new;
     my $template = $parser->parse(shift)
       or die $parser->error;
     return $template->{BLOCK};
@@ -18,7 +18,7 @@ sub parse {
 
 sub parse_lite {
     no warnings 'redefine';
-    local *Jemplate::Directive::template = sub {
+    local *Lemplate::Directive::template = sub {
         my ($class, $block) = @_;
         chomp($block);
         return "$block\n";
@@ -27,12 +27,12 @@ sub parse_lite {
 }
 
 sub compile {
-    return Jemplate->compile_template_content(shift, 'test_template');
+    return Lemplate->compile_template_content(shift, 'test_template');
 }
 
 sub compile_lite {
     my $result = $self->compile(@_);
-    $result =~ s/^Jemplate\.templateMap.*?    try \{\n//gsm;
+    $result =~ s/^Lemplate\.templateMap.*?    try \{\n//gsm;
     $result =~ s/^\s+\}\s+catch\(e\) \{\n.*?\n\}\n//gsm;
     $result =~ s/\n+\z/\n/;
     return $result;

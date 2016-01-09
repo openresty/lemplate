@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 5;
+use t::TestLemplate tests => 5;
 
 filters { 'tt' => 'parse_lite' };
 run_is 'tt' => 'js';

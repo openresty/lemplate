@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 5;
+use t::TestLemplate tests => 5;
 
 my $input = "Foo <! bar !> baz!\n";
 
@@ -15,7 +15,7 @@ output += ' baz!\n';
 
 #-------------------------------------------------------------------------------
 {
-    my $got = Jemplate->new(
+    my $got = Lemplate->new(
     )->compile_template_content($input, 'test_template');
 
     is strip($got), $unexpected, 
@@ -24,7 +24,7 @@ output += ' baz!\n';
 
 #-------------------------------------------------------------------------------
 {
-    my $got = Jemplate->new(
+    my $got = Lemplate->new(
         START_TAG => '<!',
         END_TAG => '!>',
     )->compile_template_content($input, 'test_template');
@@ -35,10 +35,10 @@ output += ' baz!\n';
 
 #-------------------------------------------------------------------------------
 {
-    my ($template_options, $jemplate_options) = Jemplate->get_options(qw(
+    my ($template_options, $jemplate_options) = Lemplate->get_options(qw(
         --compile
     )); 
-    my $got = Jemplate->new(
+    my $got = Lemplate->new(
         %$template_options,
     )->compile_template_content($input, 'test_template');
 
@@ -48,12 +48,12 @@ output += ' baz!\n';
 
 #-------------------------------------------------------------------------------
 {
-    my ($template_options, $jemplate_options) = Jemplate->get_options(qw(
+    my ($template_options, $jemplate_options) = Lemplate->get_options(qw(
         --compile
         --start-tag=<!
         --end-tag=!>
     )); 
-    my $got = Jemplate->new(
+    my $got = Lemplate->new(
         %$template_options,
     )->compile_template_content($input, 'test_template');
 
@@ -65,11 +65,11 @@ output += ' baz!\n';
 {
     $ENV{JEMPLATE_START_TAG} = '<!';
     $ENV{JEMPLATE_END_TAG} = '!>';
-    my ($template_options, $jemplate_options) = Jemplate->get_options(qw(
+    my ($template_options, $jemplate_options) = Lemplate->get_options(qw(
         --compile
     )); 
 
-    my $got = Jemplate->new(
+    my $got = Lemplate->new(
         %$template_options,
     )->compile_template_content($input, 'test_template');
 
@@ -81,7 +81,7 @@ output += ' baz!\n';
 #-------------------------------------------------------------------------------
 sub strip {
     my $result = shift;
-    $result =~ s/^Jemplate\.templateMap.*?    try \{\n//gsm;
+    $result =~ s/^Lemplate\.templateMap.*?    try \{\n//gsm;
     $result =~ s/^\s+\}\s+catch\(e\) \{\n.*?\n\}\n//gsm;
     $result =~ s/\n+\z/\n/;
     return $result;

@@ -1,4 +1,4 @@
-use t::TestJemplate;
+use t::TestLemplate;
 plan qw/no_plan/;
 
 use constant TEST_SPIDERMONKEY => $ENV{TEST_SPIDERMONKEY} ? 1 : 0;
@@ -20,7 +20,7 @@ my $content;
 sub _jemplate($@) {
     my $file = shift;
     unshift @_, "--compact" if TEST_COMPACT;
-    ok(system("$^X ./bin/jemplate @_ > $file") == 0);
+    ok(system("$^X ./bin/lemplate @_ > $file") == 0);
 }
 
 sub jemplate(@) {
@@ -159,21 +159,21 @@ jemplate qw/--runtime=lite --ajax --json/;
     check_json2;
 
 jemplate qw{--runtime --compile t/assets/jt};
-    check qr/Jemplate\.templateMap\['hello'\] = function\(context\) \{/;
+    check qr/Lemplate\.templateMap\['hello'\] = function\(context\) \{/;
 
 __END__
 
-use t::TestJemplate tests => 2;
+use t::TestLemplate tests => 2;
 
-my $output_file = 't/Jemplate.js';
+my $output_file = 't/Lemplate.js';
 unlink $output_file;
 
 ok((system("$^X ./jemplate --runtime > $output_file") == 0),
     "jemplate command ran"
 );;
 
-is(read_file($output_file), read_file("share/Jemplate.js"),
-    "--runtime output matches share/Jemplate.js"
+is(read_file($output_file), read_file("share/Lemplate.js"),
+    "--runtime output matches share/Lemplate.js"
 );
 
 sub read_file {

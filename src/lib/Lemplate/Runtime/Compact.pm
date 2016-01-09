@@ -1,4 +1,4 @@
-package Jemplate::Runtime::Compact;
+package Lemplate::Runtime::Compact;
 use strict;
 use warnings;
 

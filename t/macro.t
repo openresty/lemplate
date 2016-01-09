@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 3;
+use t::TestLemplate tests => 3;
 
 filters {
     'macro_definition' => 'compile_lite',

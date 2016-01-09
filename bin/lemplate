@@ -2,12 +2,12 @@
 
 #BOOTSTRAP-BEGIN
 # This section of code will be replaced by lots of inline Perl modules
-# to make the standalone jemplate script.
+# to make the standalone lemplate script.
 use lib 'lib';
-use Jemplate;
+use Lemplate;
 #BOOTSTRAP-END
 
-Jemplate->main(@ARGV);
+Lemplate->main(@ARGV);
 
 __END__
 
@@ -15,13 +15,13 @@ __END__
 
 =head1 Usage:
 
-    jemplate --runtime [runtime-opt]
+    lemplate --runtime [runtime-opt]
 
-    jemplate --compile [compile-opt] template-list
+    lemplate --compile [compile-opt] template-list
 
-    jemplate --runtime [runtime-opt] --compile [compile-opt] template-list
+    lemplate --runtime [runtime-opt] --compile [compile-opt] template-list
 
-    jemplate --list template-list
+    lemplate --list template-list
 
 Where C<--runtime> and C<runtime-opt> can include:
 
@@ -69,17 +69,17 @@ Where C<compile-opt> can include:
     
 =head2 Example:
 
-Write the Jemplate runtime code into Jemplate.js, then
+Write the Lemplate runtime code into Lemplate.js, then
 compile all the template files in the templates/ directory and put
-the output in my-jemplate.js.
+the output in my-lemplate.js.
 
-    jemplate --runtime > Jemplate.js
-    jemplate --compile templates/* > my-jemplate.js
+    lemplate --runtime > Lemplate.js
+    lemplate --compile templates/* > my-lemplate.js
 
 Do the same thing, but put the output into one file.
 
-    jemplate --runtime > my-jemplate.js
-    jemplate --compile templates/* >> my-jemplate.js
+    lemplate --runtime > my-lemplate.js
+    lemplate --compile templates/* >> my-lemplate.js
 
 =head2 template-list:
 
@@ -92,28 +92,28 @@ the template name.
 So 'template/foo/bar.tt2' will be named 'bar.tt2', but 'template/' will
 find a template named 'foo/bar.tt2'.
 
-It is important to know what Jemplate thinks the template name will be
+It is important to know what Lemplate thinks the template name will be
 when you are writing templates or code that refers to other templates.
 Use the --list option to check this.
 
 =head1 Commands:
 
     -r, --runtime
-        This flag tells Jemplate to print the Jemplate JavaScript
+        This flag tells Lemplate to print the Lemplate JavaScript
         runtime code to STDOUT. You should redirect this output into
         a .js file.
 
     -c, --compile
-        The --compile flag tells Jemplate to actually compile templates.
+        The --compile flag tells Lemplate to actually compile templates.
         The output is written to STDOUT.
 
     -l, --list
-        Just print (STDOUT) the template names that Jemplate would use
+        Just print (STDOUT) the template names that Lemplate would use
         from the template-list.
 
 =head1 Template Toolkit Compile Options:
 
-Jemplate allows you to specify the following Template Toolkit compile
+Lemplate allows you to specify the following Template Toolkit compile
 time options. Full descriptions of these options are available at
 L<http://www.template-toolkit.org/docs/plain/Manual/Config.html>.
 
@@ -142,9 +142,9 @@ command line switches.
         Allow the execution of raw JavaScript. Default is on.
         Use --noeval to disallow it.
 
-=head1 Jemplate Options:
+=head1 Lemplate Options:
 
-These compile time options are specific to Jemplate.
+These compile time options are specific to Lemplate.
 
     -s, --source
         Include the original template source code as a JavaScript

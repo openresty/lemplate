@@ -1,3 +1,3 @@
-use t::TestJemplate tests => 1;
+use t::TestLemplate tests => 1;
 
 pass 'Test system works';

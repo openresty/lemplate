@@ -1,20 +1,20 @@
-package Jemplate::Parser;
+package Lemplate::Parser;
 use strict;
 use warnings;
 use base 'Template::Parser';
 
-use Jemplate::Grammar;
-use Jemplate::Directive;
+use Lemplate::Grammar;
+use Lemplate::Directive;
 
 sub new {
     my $class = shift;
     my $parser = $class->SUPER::new(
-        GRAMMAR => Jemplate::Grammar->new(),
-        FACTORY => 'Jemplate::Directive',
+        GRAMMAR => Lemplate::Grammar->new(),
+        FACTORY => 'Lemplate::Directive',
         @_,
     );
 
-    # flags passed from Jemplate object
+    # flags passed from Lemplate object
     my %args = @_;
 
     # eval-javascript is default "on"
@@ -22,7 +22,7 @@ sub new {
       ? $args{EVAL_JAVASCRIPT} : 1;
 
     # tie the parser state-variable to the global Directive var
-    $parser->{INJAVASCRIPT} = \$Jemplate::Directive::INJAVASCRIPT;
+    $parser->{INJAVASCRIPT} = \$Lemplate::Directive::INJAVASCRIPT;
 
     return $parser;
 }
@@ -35,15 +35,15 @@ __END__
 
 =head1 NAME
 
-Jemplate::Parser - Jemplate Parser Subclass
+Lemplate::Parser - Lemplate Parser Subclass
 
 =head1 SYNOPSIS
 
-    use Jemplate::Parser;
+    use Lemplate::Parser;
 
 =head1 DESCRIPTION
 
-Jemplate::Parser is a simple subclass of Template::Parser. Not much
+Lemplate::Parser is a simple subclass of Template::Parser. Not much
 to see here.
 
 =head1 AUTHOR

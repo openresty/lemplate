@@ -11,12 +11,12 @@ BEGIN {
 
 plan qw/no_plan/;
 
-use Jemplate;
-use Jemplate::Runtime;
+use Lemplate;
+use Lemplate::Runtime;
 
 use JavaScript::V8x::TestMoreish;
 
-my $jemplate = Jemplate->new;
+my $jemplate = Lemplate->new;
 my @js;
 
 push @js, $jemplate->compile_template_content( <<_END_, 't0' );
@@ -27,25 +27,25 @@ push @js, $jemplate->compile_template_content( <<_END_, 't0' );
 [% BLOCK t5 %][% apple.slice( 3, -1 ).join(' - ') %][% END %]
 _END_
 
-test_js_eval( Jemplate::Runtime->kernel );
+test_js_eval( Lemplate::Runtime->kernel );
 test_js_eval( join "\n", @js, "1;" );
 test_js <<'_END_';
 var result
 var apple = [ 1, 2, 3, 4, 5, 6, 7 ]
 
-result = Jemplate.process( 't1', { apple: apple } )
+result = Lemplate.process( 't1', { apple: apple } )
 areEqual( result, "1 - 2 - 3" );
 
-result = Jemplate.process( 't2', { apple: apple } )
+result = Lemplate.process( 't2', { apple: apple } )
 areEqual( result, "5 - 6 - 7" );
 
-result = Jemplate.process( 't3', { apple: apple } )
+result = Lemplate.process( 't3', { apple: apple } )
 areEqual( result, "5 - 6" );
 
-result = Jemplate.process( 't4', { apple: apple } )
+result = Lemplate.process( 't4', { apple: apple } )
 areEqual( result, "4 - 5 - 6" );
 
-result = Jemplate.process( 't5', { apple: apple } )
+result = Lemplate.process( 't5', { apple: apple } )
 areEqual( result, "4 - 5 - 6 - 7" );
 _END_
 

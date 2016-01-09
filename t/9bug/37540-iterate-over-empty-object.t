@@ -11,12 +11,12 @@ BEGIN {
 
 plan qw/no_plan/;
 
-use Jemplate;
-use Jemplate::Runtime;
+use Lemplate;
+use Lemplate::Runtime;
 
 use JavaScript::V8x::TestMoreish;
 
-my $jemplate = Jemplate->new;
+my $jemplate = Lemplate->new;
 my @js;
 
 push @js, $jemplate->compile_template_content( <<_END_, 't0' );
@@ -27,9 +27,9 @@ push @js, $jemplate->compile_template_content( <<_END_, 't0' );
 [% END %]
 _END_
 
-test_js_eval( Jemplate::Runtime->kernel );
+test_js_eval( Lemplate::Runtime->kernel );
 test_js_eval( join "\n", @js, "1;" );
 test_js <<'_END_';
-result = Jemplate.process( 't1', { empty: [] } )
+result = Lemplate.process( 't1', { empty: [] } )
 areEqual( result, 1 );
 _END_

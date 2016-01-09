@@ -11,12 +11,12 @@ BEGIN {
 
 plan qw/no_plan/;
 
-use Jemplate;
-use Jemplate::Runtime;
+use Lemplate;
+use Lemplate::Runtime;
 
 use JavaScript::V8x::TestMoreish;
 
-my $jemplate = Jemplate->new;
+my $jemplate = Lemplate->new;
 my @js;
 
 push @js, $jemplate->compile_template_content( <<_END_, 't0' );
@@ -33,20 +33,20 @@ _END_
 };
 like $@, qr{Range expansion is current supported for positive/negative integer values only};
 
-test_js_eval( Jemplate::Runtime->kernel );
+test_js_eval( Lemplate::Runtime->kernel );
 test_js_eval( join "\n", @js, "1;" );
 test_js <<'_END_';
 var result
 
-result = Jemplate.process( 't1', { } )
+result = Lemplate.process( 't1', { } )
 areEqual( result, "1, 2, 3, 4, 5, 6, 7, 8, 9, 10" );
 
-result = Jemplate.process( 't2', { } )
+result = Lemplate.process( 't2', { } )
 areEqual( result, "1 2 3 4 " );
 
-result = Jemplate.process( 't3', { } )
+result = Lemplate.process( 't3', { } )
 areEqual( result, "" );
 
-result = Jemplate.process( 't4', { } )
+result = Lemplate.process( 't4', { } )
 areEqual( result, "-4 -3 -2 -1 " );
 _END_

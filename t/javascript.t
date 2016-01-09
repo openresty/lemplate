@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 2;
+use t::TestLemplate tests => 2;
 
 filters {
     'tt' => 'compile_lite',
@@ -8,7 +8,7 @@ run_is 'tt' => 'js';
 run_is 'tt_nojs' => 'js';
 
 sub no_javascript {
-    my $jemplate = Jemplate->new( EVAL_JAVASCRIPT => 0 );
+    my $jemplate = Lemplate->new( EVAL_JAVASCRIPT => 0 );
     my $result = eval {
         $jemplate->compile_template_content(shift, 'test_template');
     };

@@ -1,7 +1,7 @@
 .PHONY: fetch runtime js
 
-JEMPLATE_SCRIPT=../bin/jemplate
-JEMPLATE_STANDALONE_SCRIPT=../jemplate
+JEMPLATE_SCRIPT=../bin/lemplate
+JEMPLATE_STANDALONE_SCRIPT=../lemplate
 GRAMMAR_MODULE=../lib/Jemplate/Grammar.pm
 RUNTIME_MODULE=../lib/Jemplate/Runtime.pm
 RUNTIME_COMPACT_MODULE=../lib/Jemplate/Runtime/Compact.pm

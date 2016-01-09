@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 1;
+use t::TestLemplate tests => 1;
 
 filters { 'tt' => 'parse_lite' };
 no_diff;

@@ -1,4 +1,4 @@
-package Jemplate::Directive;
+package Lemplate::Directive;
 use strict;
 use warnings;
 
@@ -22,7 +22,7 @@ sub template {
 
     return <<"...";
 function(context) {
-    if (! context) throw('Jemplate function called without context\\n');
+    if (! context) throw('Lemplate function called without context\\n');
     var stash = context.stash;
     var output = '';
 
@@ -302,7 +302,7 @@ sub foreach {
 // FOREACH 
 (function() {
     var list = $list;
-    list = new Jemplate.Iterator(list);
+    list = new Lemplate.Iterator(list);
     var retval = list.get_first();
     var value = retval[0];
     var done = retval[1];
@@ -527,7 +527,7 @@ sub return {
 #------------------------------------------------------------------------
 
 sub stop {
-    return "throw('Jemplate.STOP\\n' + output);";
+    return "throw('Lemplate.STOP\\n' + output);";
 }   
 
 
@@ -596,7 +596,7 @@ sub quoted {
     if ( @_ && ref($_[0]) ) {
         return join( " + ", @{$_[0]} );
     }
-    return "throw('QUOTED called with unknown arguments in Jemplate');";
+    return "throw('QUOTED called with unknown arguments in Lemplate');";
 }   
 
 #------------------------------------------------------------------------
@@ -723,23 +723,23 @@ __END__
 
 =head1 NAME
 
-Jemplate::Directive - Jemplate Code Generating Backend
+Lemplate::Directive - Lemplate Code Generating Backend
 
 =head1 SYNOPSIS
 
-    use Jemplate::Directive;
+    use Lemplate::Directive;
 
 =head1 DESCRIPTION
 
-Jemplate::Directive is the analog to Template::Directive, which is the
+Lemplate::Directive is the analog to Template::Directive, which is the
 module that produces that actual code that templates turn into. The
-Jemplate version obviously produces JavaScript code rather than Perl.
+Lemplate version obviously produces JavaScript code rather than Perl.
 Other than that the two modules are almost exactly the same.
 
 =head1 BUGS
 
 Unfortunately, some of the code generation seems to happen before
-Jemplate::Directive gets control. So it currently has heuristical code
+Lemplate::Directive gets control. So it currently has heuristical code
 to rejigger Perl code snippets into JavaScript. This processing needs to
 happen upstream once I get more clarity on how Template::Toolkit works.
 

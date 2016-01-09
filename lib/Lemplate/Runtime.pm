@@ -1,4 +1,4 @@
-package Jemplate::Runtime;
+package Lemplate::Runtime;
 use strict;
 use warnings;
 
@@ -6,10 +6,10 @@ sub main { return &kernel }
 sub kernel {
     <<'...';
 /*------------------------------------------------------------------------------
-Jemplate - Template Toolkit for JavaScript
+Lemplate - Template Toolkit for JavaScript
 
 DESCRIPTION - This module provides the runtime JavaScript support for
-compiled Jemplate templates.
+compiled Lemplate templates.
 
 AUTHOR - Ingy döt Net <ingy@cpan.org>
 
@@ -20,28 +20,28 @@ modify it under the same terms as Perl itself.
 ------------------------------------------------------------------------------*/
 
 //------------------------------------------------------------------------------
-// Main Jemplate class
+// Main Lemplate class
 //------------------------------------------------------------------------------
 
-if (typeof Jemplate == 'undefined') {
-    var Jemplate = function() {
+if (typeof Lemplate == 'undefined') {
+    var Lemplate = function() {
         this.init.apply(this, arguments);
     };
 }
 
-Jemplate.VERSION = '0.22';
+Lemplate.VERSION = '0.22';
 
-Jemplate.process = function() {
-    var jemplate = new Jemplate(Jemplate.prototype.config);
-    return jemplate.process.apply(jemplate, arguments);
+Lemplate.process = function() {
+    var lemplate = new Lemplate(Lemplate.prototype.config);
+    return lemplate.process.apply(lemplate, arguments);
 }
 
 ;(function(){
 
-if (! Jemplate.templateMap)
-    Jemplate.templateMap = {};
+if (! Lemplate.templateMap)
+    Lemplate.templateMap = {};
 
-var proto = Jemplate.prototype = {};
+var proto = Lemplate.prototype = {};
 
 proto.config = {
     AUTO_RESET: true,
@@ -93,13 +93,13 @@ proto.defaults = {
 };
 
 
-Jemplate.init = function(config) {
+Lemplate.init = function(config) {
  
-    Jemplate.prototype.config = config || {};
+    Lemplate.prototype.config = config || {};
     
-    for (var i in Jemplate.prototype.defaults) {
-        if(typeof Jemplate.prototype.config[i] == "undefined") {
-            Jemplate.prototype.config[i] = Jemplate.prototype.defaults[i];
+    for (var i in Lemplate.prototype.defaults) {
+        if(typeof Lemplate.prototype.config[i] == "undefined") {
+            Lemplate.prototype.config[i] = Lemplate.prototype.defaults[i];
         }
     }
 }
@@ -108,23 +108,23 @@ proto.init = function(config) {
     
     this.config = config || {};
     
-    for (var i in Jemplate.prototype.defaults) {
+    for (var i in Lemplate.prototype.defaults) {
         if(typeof this.config[i] == "undefined") {
-            this.config[i] = Jemplate.prototype.defaults[i];
+            this.config[i] = Lemplate.prototype.defaults[i];
         }
     }
 }
 
 proto.process = function(template, data, output) {
-    var context = this.config.CONTEXT || new Jemplate.Context();
+    var context = this.config.CONTEXT || new Lemplate.Context();
     context.config = this.config;
 
-    context.stash = new Jemplate.Stash(this.config.STASH, this.config);
+    context.stash = new Lemplate.Stash(this.config.STASH, this.config);
 
-    context.__filter__ = new Jemplate.Filter();
+    context.__filter__ = new Lemplate.Filter();
     context.__filter__.config = this.config;
 
-    context.__plugin__ = new Jemplate.Plugin();
+    context.__plugin__ = new Lemplate.Plugin();
     context.__plugin__.config = this.config;
 
     var result;
@@ -144,9 +144,9 @@ proto.process = function(template, data, output) {
             }
         }
         catch(e) {
-            if (! String(e).match(/Jemplate\.STOP\n/))
+            if (! String(e).match(/Lemplate\.STOP\n/))
                 throw(e);
-            result = e.toString().replace(/Jemplate\.STOP\n/, '');
+            result = e.toString().replace(/Lemplate\.STOP\n/, '');
         }
 
         if (typeof output == 'undefined')
@@ -170,7 +170,7 @@ proto.process = function(template, data, output) {
             return null;
         }
 
-        throw("Invalid arguments in call to Jemplate.process");
+        throw("Invalid arguments in call to Lemplate.process");
 
         return 1;
     }
@@ -178,9 +178,9 @@ proto.process = function(template, data, output) {
     if (typeof data == 'function')
         data = data();
     else if (typeof data == 'string') {
-//        Jemplate.Ajax.get(data, function(r) { proc(Jemplate.JSON.parse(r)) });
+//        Lemplate.Ajax.get(data, function(r) { proc(Lemplate.JSON.parse(r)) });
         var url = data;
-        Jemplate.Ajax.processGet(url, function(data) { proc(data) });
+        Lemplate.Ajax.processGet(url, function(data) { proc(data) });
         return null;
     }
 
@@ -188,12 +188,12 @@ proto.process = function(template, data, output) {
 }
 
 //------------------------------------------------------------------------------
-// Jemplate.Context class
+// Lemplate.Context class
 //------------------------------------------------------------------------------
-if (typeof Jemplate.Context == 'undefined')
-    Jemplate.Context = function() {};
+if (typeof Lemplate.Context == 'undefined')
+    Lemplate.Context = function() {};
 
-proto = Jemplate.Context.prototype;
+proto = Lemplate.Context.prototype;
 
 proto.include = function(template, args) {
     return this.process(template, args, true);
@@ -204,9 +204,9 @@ proto.process = function(template, args, localise) {
         this.stash.clone(args);
     else
         this.stash.update(args);
-    var func = Jemplate.templateMap[template];
+    var func = Lemplate.templateMap[template];
     if (typeof func == 'undefined')
-        throw('No Jemplate template named "' + template + '" available');
+        throw('No Lemplate template named "' + template + '" available');
     var output = func(this);
     if (localise)
         this.stash.declone();
@@ -237,24 +237,24 @@ proto.filter = function(text, name, args) {
 }
 
 //------------------------------------------------------------------------------
-// Jemplate.Plugin class
+// Lemplate.Plugin class
 //------------------------------------------------------------------------------
-if (typeof Jemplate.Plugin == 'undefined') {
-    Jemplate.Plugin = function() { };
+if (typeof Lemplate.Plugin == 'undefined') {
+    Lemplate.Plugin = function() { };
 }
 
-proto = Jemplate.Plugin.prototype;
+proto = Lemplate.Plugin.prototype;
 
 proto.plugins = {};
 
 //------------------------------------------------------------------------------
-// Jemplate.Filter class
+// Lemplate.Filter class
 //------------------------------------------------------------------------------
-if (typeof Jemplate.Filter == 'undefined') {
-    Jemplate.Filter = function() { };
+if (typeof Lemplate.Filter == 'undefined') {
+    Lemplate.Filter = function() { };
 }
 
-proto = Jemplate.Filter.prototype;
+proto = Lemplate.Filter.prototype;
 
 proto.filters = {};
 
@@ -375,10 +375,10 @@ proto.filters.replace = function(text, args) {
 }
 
 //------------------------------------------------------------------------------
-// Jemplate.Stash class
+// Lemplate.Stash class
 //------------------------------------------------------------------------------
-if (typeof Jemplate.Stash == 'undefined') {
-    Jemplate.Stash = function(stash, config) {
+if (typeof Lemplate.Stash == 'undefined') {
+    Lemplate.Stash = function(stash, config) {
         this.__config__ = config;
 		
 		this.data = {
@@ -391,7 +391,7 @@ if (typeof Jemplate.Stash == 'undefined') {
     };
 }
 
-proto = Jemplate.Stash.prototype;
+proto = Lemplate.Stash.prototype;
 
 proto.clone = function(args) {
     var data = this.data;
@@ -961,10 +961,10 @@ proto.hash_functions.remove = function(hash, key) {
 proto.hash_functions['delete'] = proto.hash_functions.remove;
 
 //------------------------------------------------------------------------------
-// Jemplate.Iterator class
+// Lemplate.Iterator class
 //------------------------------------------------------------------------------
-if (typeof Jemplate.Iterator == 'undefined') {
-    Jemplate.Iterator = function(object) {
+if (typeof Lemplate.Iterator == 'undefined') {
+    Lemplate.Iterator = function(object) {
         if( object instanceof Array ) {
             this.object = object;
             this.size = object.length;
@@ -986,7 +986,7 @@ if (typeof Jemplate.Iterator == 'undefined') {
     }
 }
 
-proto = Jemplate.Iterator.prototype;
+proto = Lemplate.Iterator.prototype;
 
 proto.get_first = function() {
     this.index = 0;
@@ -1029,30 +1029,30 @@ proto.get_next = function(should_init) {
 
 var stubExplanation = "stub that doesn't do anything. Try including the jQuery, YUI, or XHR option when building the runtime";
 
-Jemplate.Ajax = {
+Lemplate.Ajax = {
 
     get: function(url, callback) {
-        throw("This is a Jemplate.Ajax.get " + stubExplanation);
+        throw("This is a Lemplate.Ajax.get " + stubExplanation);
     },
 
     processGet: function(url, callback) {
-        throw("This is a Jemplate.Ajax.processGet " + stubExplanation);
+        throw("This is a Lemplate.Ajax.processGet " + stubExplanation);
     },
 
     post: function(url, callback) {
-        throw("This is a Jemplate.Ajax.post " + stubExplanation);
+        throw("This is a Lemplate.Ajax.post " + stubExplanation);
     }
 
 };
 
-Jemplate.JSON = {
+Lemplate.JSON = {
 
     parse: function(decodeValue) {
-        throw("This is a Jemplate.JSON.parse " + stubExplanation);
+        throw("This is a Lemplate.JSON.parse " + stubExplanation);
     },
 
     stringify: function(encodeValue) {
-        throw("This is a Jemplate.JSON.stringify " + stubExplanation);
+        throw("This is a Lemplate.JSON.stringify " + stubExplanation);
     }
 
 };
@@ -1066,7 +1066,7 @@ sub ajax_jquery {
     <<'...';
 ;(function(){
 
-Jemplate.Ajax = {
+Lemplate.Ajax = {
 
     get: function(url, callback) {
         jQuery.get(url, null, callback);
@@ -1092,7 +1092,7 @@ sub ajax_xhr {
     <<'...';
 ;(function(){
 
-Jemplate.Ajax = {
+Lemplate.Ajax = {
 
     get: function(url, callback) {
         var request = new XMLHttpRequest();
@@ -1103,7 +1103,7 @@ Jemplate.Ajax = {
 
     processGet: function(url, processor) {
         this.get(url, function(responseText){
-            processor(Jemplate.JSON.parse(responseText));
+            processor(Lemplate.JSON.parse(responseText));
         });
     },
 
@@ -1146,7 +1146,7 @@ sub ajax_yui {
     <<'...';
 ;(function(){
 
-Jemplate.Ajax = {
+Lemplate.Ajax = {
 
     get: function(url, callback) {
         if (typeof callback == "function") {
@@ -1179,7 +1179,7 @@ sub json_json2 {
     <<'...';
 ;(function(){
 
-Jemplate.JSON = {
+Lemplate.JSON = {
 
     parse: function(encoded) {
         return JSON.parse(encoded);
@@ -1684,7 +1684,7 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
 }());
 
 
-Jemplate.JSON = {
+Lemplate.JSON = {
 
     parse: function(encoded) {
         return JSON.parse(encoded);
@@ -1705,7 +1705,7 @@ sub json_yui {
     <<'...';
 ;(function(){
 
-Jemplate.JSON = {
+Lemplate.JSON = {
 
     parse: function(encoded) {
         return YAHOO.lang.JSON.parse(encoded);
@@ -2803,17 +2803,17 @@ __END__
 
 =head1 NAME
 
-Jemplate::Runtime - Perl Module containing the Jemplate JavaScript Runtime
+Lemplate::Runtime - Perl Module containing the Lemplate JavaScript Runtime
 
 =head1 SYNOPSIS
 
-    use Jemplate::Runtime;
-    print Jemplate::Runtime->main;
+    use Lemplate::Runtime;
+    print Lemplate::Runtime->main;
 
 =head1 DESCRIPTION
 
-This module is auto-generated and used internally by Jemplate. It
-contains subroutines that simply return various parts of the Jemplate
+This module is auto-generated and used internally by Lemplate. It
+contains subroutines that simply return various parts of the Lemplate
 JavaScript Runtime code.
 
 =head1 METHODS

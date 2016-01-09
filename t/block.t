@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 3;
+use t::TestLemplate tests => 3;
 
 filters {
     'empty_template_body' => 'compile',
@@ -14,7 +14,7 @@ __END__
 ===
 --- empty_template_body
 --- js -trim
-Jemplate.templateMap['test_template'] = function() { return ''; }
+Lemplate.templateMap['test_template'] = function() { return ''; }
 ===
 --- tt_to_full
 Foo
@@ -25,8 +25,8 @@ Bar
 [% END -%]
 
 --- js -trim
-Jemplate.templateMap['test_template'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
+Lemplate.templateMap['test_template'] = function(context) {
+    if (! context) throw('Lemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 
@@ -45,8 +45,8 @@ output += 'Baz\n';
     return output;
 }
 
-Jemplate.templateMap['red_meat'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
+Lemplate.templateMap['red_meat'] = function(context) {
+    if (! context) throw('Lemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 
