@@ -8,3 +8,7 @@ t/a.js
 t/b.js
 t/check.js
 t?
+*~
+*.swp
+*.swo
+*.bak
