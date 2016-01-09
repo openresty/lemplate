@@ -5,31 +5,26 @@ use warnings;
 sub main { return &kernel }
 sub kernel {
     <<'...';
-[% INCLUDE "js/kernel.js" %]
 ...
 }
 
 sub ajax_jquery {
     <<'...';
-[% INCLUDE "js/ajax-jquery.js" %]
 ...
 }
 
 sub ajax_xhr {
     <<'...';
-[% INCLUDE "js/ajax-xhr.js" %]
 ...
 }
 
 sub ajax_yui {
     <<'...';
-[% INCLUDE "js/ajax-yui.js" %]
 ...
 }
 
 sub json_json2 {
     <<'...';
-[% INCLUDE "js/json-json2.js" %]
 ...
 }
 
@@ -39,41 +34,32 @@ sub json_json2_internal {
 
 var JSON;
 
-[% INCLUDE "js/json2.js" %]
-
-[% INCLUDE "js/json-json2-internal.js" %]
-
 }());
 ...
 }
 
 sub json_yui {
     <<'...';
-[% INCLUDE "js/json-yui.js" %]
 ...
 }
 
 sub json2 {
     <<'...';
-[% INCLUDE "js/json2.js" %]
 ...
 }
 
 sub xhr_gregory {
     <<'...';
-[% INCLUDE "js/xhr-gregory.js" %]
 ...
 }
 
 sub xhr_ilinsky {
     <<'...';
-[% INCLUDE "js/xhr-ilinsky.js" %]
 ...
 }
 
 sub xxx {
     <<'...';
-[% INCLUDE "js/xxx.js" %]
 ...
 }
 

@@ -1,1 +1,0 @@
-(function(){Jemplate.JSON={parse:function(A){return JSON.parse(A)},stringify:function(A){return JSON.stringify(A)}}}())

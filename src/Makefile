@@ -1,4 +1,6 @@
-.PHONY: fetch runtime js
+.PHONY: fetch runtime
+
+.DELETE_ON_ERROR: $(RUNTIME_MODULE) $(RUNTIME_COMPACT_MODULE)
 
 JEMPLATE_SCRIPT=../bin/lemplate
 JEMPLATE_STANDALONE_SCRIPT=../lemplate

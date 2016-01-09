@@ -1,1 +1,0 @@
-(function(){Jemplate.Ajax={get:function(A,B){jQuery.get(A,null,B)},processGet:function(A,B){jQuery.getJSON(A,null,B)},post:function(A,B,C){jQuery.post(A,B,C)}}}())

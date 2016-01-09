@@ -17,16 +17,16 @@ my $b_file = "t/b.js";
 
 my $content;
 
-sub _jemplate($@) {
+sub _lemplate($@) {
     my $file = shift;
     unshift @_, "--compact" if TEST_COMPACT;
     ok(system("$^X ./bin/lemplate @_ > $file") == 0);
 }
 
-sub jemplate(@) {
+sub lemplate(@) {
     my $file = $check_file;
     undef $content;
-    _jemplate $file, @_;
+    _lemplate $file, @_;
     ok(-s $file);
     if (TEST_SPIDERMONKEY) {
         ok(system("js -swC -e 'var window = { document: {}, Function: { prototype: {} } }' $file") == 0);
@@ -45,8 +45,8 @@ sub check(@) {
 }
 
 sub same($$) {
-    _jemplate($a_file, @{ shift() });
-    _jemplate($b_file, @{ shift() });
+    _lemplate($a_file, @{ shift() });
+    _lemplate($b_file, @{ shift() });
     ok(-s $a_file > 0 && -s $a_file == -s $b_file);
 }
 
@@ -89,7 +89,7 @@ sub check_json2 {
     check qr/return\s+JSON\.stringify\(/;
 }
 
-jemplate qw/--runtime/;
+lemplate qw/--runtime/;
     check_xhr;
     check_json2;
     check_ilinsky;
@@ -98,67 +98,67 @@ same([qw/--runtime/], [qw/--runtime=lite --ajax=xhr --xhr=ilinsky --json/]);
 same([qw/--runtime/], [qw/--runtime=lite --ajax=xhr --xhr=ilinsky --json=json/]);
 same([qw/--runtime/], [qw/--runtime=lite --ajax=xhr --xhr=ilinsky --json=json2/]);
 
-jemplate qw/--runtime=standard/;
+lemplate qw/--runtime=standard/;
     check_xhr;
     check_json2;
     check_ilinsky;
 
 same([qw/--runtime/], [qw/--runtime=standard/]);
 
-jemplate qw/--runtime=lite/;
+lemplate qw/--runtime=lite/;
 #    !check_xhr;
 #    !check_json2;
 #    !check_ilinsky;
 
-jemplate qw/--runtime=jquery/;
+lemplate qw/--runtime=jquery/;
     check_jquery;
 
 same([qw/--runtime=jquery/], [qw/--runtime=lite --ajax=jquery/]);
 
-jemplate qw/--runtime=yui/;
+lemplate qw/--runtime=yui/;
     check_yui;
 
 same([qw/--runtime=yui/], [qw/--runtime=lite --ajax=yui --json=yui/]);
 
-jemplate qw/--runtime=legacy/;
+lemplate qw/--runtime=legacy/;
     check_xhr;
     check_json2;
     check_gregory;
 
 same([qw/--runtime=legacy/], [qw/--runtime=lite --ajax=xhr --json=json2 --xhr=gregory --xxx/]);
 
-jemplate qw/--runtime=lite/;
+lemplate qw/--runtime=lite/;
 
-jemplate qw/--runtime=yui --xhr=ilinsky/;
+lemplate qw/--runtime=yui --xhr=ilinsky/;
     check_yui;
     check_ilinsky;
 
 # Don't know why you would want this combo, it'll break YAHOO.connect.
-jemplate qw/--runtime=yui --xhr=gregory/;
+lemplate qw/--runtime=yui --xhr=gregory/;
     check_yui;
     check_gregory;
 
-jemplate qw/--runtime=yui --xhr=gregory --xxx/;
+lemplate qw/--runtime=yui --xhr=gregory --xxx/;
     check_yui;
     check_gregory;
     check_xxx;
 
-jemplate qw/--runtime=legacy/;
+lemplate qw/--runtime=legacy/;
     check_gregory;
     check_xxx;
     check_xhr;
 
-jemplate qw/--runtime=lite --ajax/;
+lemplate qw/--runtime=lite --ajax/;
     check_xhr;
     check_ilinsky;
 #    !check_json2;
 
-jemplate qw/--runtime=lite --ajax --json/;
+lemplate qw/--runtime=lite --ajax --json/;
     check_xhr;
     check_ilinsky;
     check_json2;
 
-jemplate qw{--runtime --compile t/assets/jt};
+lemplate qw{--runtime --compile t/assets/jt};
     check qr/Lemplate\.templateMap\['hello'\] = function\(context\) \{/;
 
 __END__
@@ -168,8 +168,8 @@ use t::TestLemplate tests => 2;
 my $output_file = 't/Lemplate.js';
 unlink $output_file;
 
-ok((system("$^X ./jemplate --runtime > $output_file") == 0),
-    "jemplate command ran"
+ok((system("$^X ./lemplate --runtime > $output_file") == 0),
+    "lemplate command ran"
 );;
 
 is(read_file($output_file), read_file("share/Lemplate.js"),

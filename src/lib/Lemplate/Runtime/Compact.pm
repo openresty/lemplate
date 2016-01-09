@@ -5,31 +5,26 @@ use warnings;
 sub main { return &kernel }
 sub kernel {
     <<'...';
-[% INCLUDE "js/kernel.compact.js" %]
 ...
 }
 
 sub ajax_jquery {
     <<'...';
-[% INCLUDE "js/ajax-jquery.compact.js" %]
 ...
 }
 
 sub ajax_xhr {
     <<'...';
-[% INCLUDE "js/ajax-xhr.compact.js" %]
 ...
 }
 
 sub ajax_yui {
     <<'...';
-[% INCLUDE "js/ajax-yui.compact.js" %]
 ...
 }
 
 sub json_json2 {
     <<'...';
-[% INCLUDE "js/json-json2.compact.js" %]
 ...
 }
 
@@ -39,9 +34,7 @@ sub json_json2_internal {
 
 var JSON;
 
-[% INCLUDE "js/json2.compact.js" %]
 
-[% INCLUDE "js/json-json2-internal.compact.js" %]
 
 }());
 ...
@@ -49,31 +42,26 @@ var JSON;
 
 sub json_yui {
     <<'...';
-[% INCLUDE "js/json-yui.compact.js" %]
 ...
 }
 
 sub json2 {
     <<'...';
-[% INCLUDE "js/json2.compact.js" %]
 ...
 }
 
 sub xhr_gregory {
     <<'...';
-[% INCLUDE "js/xhr-gregory.compact.js" %]
 ...
 }
 
 sub xhr_ilinsky {
     <<'...';
-[% INCLUDE "js/xhr-ilinsky.compact.js" %]
 ...
 }
 
 sub xxx {
     <<'...';
-[% INCLUDE "js/xxx.compact.js" %]
 ...
 }
 
