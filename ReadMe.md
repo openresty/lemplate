@@ -19,7 +19,7 @@ Table of Contents
 
 # Status
 
-**WARNING** This is still under development and is not usable yet. Check back later.
+**WARNING** This is still under early development. Check back often.
 
 # SYNOPSIS
 
@@ -121,7 +121,6 @@ Jemplate now supports almost all the TT directives, including:
     * [% PROCESS [arguments] %]
     * [% BLOCK name %]
     * [% FILTER filter %] text... [% END %]
-    * [% JAVASCRIPT %] code... [% END %]
     * [% WRAPPER template [variable = value ...] %]
     * [% IF condition %]
     * [% ELSIF condition %]
