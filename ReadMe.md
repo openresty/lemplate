@@ -15,6 +15,7 @@ Table of Contents
 * [DEVELOPMENT](#development)
 * [CREDIT](#credit)
 * [AUTHOR](#author)
+* [Copyright](#copyright)
 * [See Also](#see-also)
 
 # Status
@@ -167,6 +168,20 @@ This project is based on Ingy dot Net's excellent [Jemplate](http://www.jemplate
 # AUTHOR
 
 Yichun Zhang (agentzh)
+
+[Back to TOC](#table-of-contents)
+
+# Copyright
+
+Copyright (C) 2016 Yichun Zhang (agentzh).  All Rights Reserved.
+
+Copyright (C) 1996-2014 Andy Wardley.  All Rights Reserved.
+
+Copyright (c) 2006-2014. Ingy döt Net. All rights reserved.
+
+Copyright (C) 1998-2000 Canon Research Centre Europe Ltd
+
+This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 [Back to TOC](#table-of-contents)
 
