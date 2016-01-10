@@ -12,7 +12,11 @@ Table of Contents
 * [HOWTO](#howto)
 * [PUBLIC API](#public-api)
 * [CURRENT SUPPORT](#current-support)
-* [DEVELOPMENT](#development)
+* [Community](#community)
+    * [English Mailing List](#english-mailing-list)
+    * [Chinese Mailing List](#chinese-mailing-list)
+* [Code Repository](#code-repository)
+* [Bugs and Patches](#bugs-and-patches)
 * [CREDIT](#credit)
 * [AUTHOR](#author)
 * [Copyright](#copyright)
@@ -152,10 +156,40 @@ in the distro for a list of all features and their progress.
 
 [Back to TOC](#table-of-contents)
 
-# DEVELOPMENT
+Community
+=========
+
+[Back to TOC](#table-of-contents)
+
+English Mailing List
+--------------------
+
+The [openresty-en](https://groups.google.com/group/openresty-en) mailing list is for English speakers.
+
+[Back to TOC](#table-of-contents)
+
+Chinese Mailing List
+--------------------
+
+The [openresty](https://groups.google.com/group/openresty) mailing list is for Chinese speakers.
+
+[Back to TOC](#table-of-contents)
+
+Code Repository
+===============
 
 The bleeding edge code is available via Git at
 git://github.com/openresty/lemplate.git
+
+[Back to TOC](#table-of-contents)
+
+Bugs and Patches
+================
+
+Please submit bug reports, wishlists, or patches by
+
+1. creating a ticket on the [GitHub Issue Tracker](https://github.com/openresty/lua-nginx-module/issues),
+2. or posting to the [OpenResty community](#community).
 
 [Back to TOC](#table-of-contents)
 
