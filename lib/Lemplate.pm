@@ -573,7 +573,7 @@ Lemplate - OpenResty/Lua template framework implementing Perl's TT2 templating l
 
 =head1 Status
 
-B<WARNING> This is still under early development. Check back often.
+This is still under early development. Check back often.
 
 =head1 Synopsis
 

@@ -24,7 +24,7 @@ Table of Contents
 
 # Status
 
-**WARNING** This is still under early development. Check back often.
+This is still under early development. Check back often.
 
 # Synopsis
 
