@@ -12,6 +12,11 @@ use Getopt::Long;
 use Lemplate::Parser;
 
 #-------------------------------------------------------------------------------
+
+our %ExtraTemplates;
+our %ProcessedTemplates;
+our $TemplateName;
+
 sub usage {
     <<'...';
 Usage:
@@ -55,6 +60,8 @@ Where "--runtime" and "runtime-opt" can include:
 
 Where "compile-opt" can include:
 
+    --include_path=DIR  Add directory to INCLUDE_PATH
+
     --start-tag
     --end-tag
     --pre-chomp
@@ -97,15 +104,33 @@ sub main {
     if ($compile) {
         my $lemplate = Lemplate->new(%$template_options);
         print STDOUT $lemplate->_preamble;
-        foreach my $template (@$templates) {
+        for (my $i = 0; $i < @$templates; $i++) {
+            my $template = $templates->[$i];
+            #warn "processing $template->{short}";
             my $content = slurp($template->{full});
             if ($content) {
+                %ExtraTemplates = ();
                 print STDOUT $lemplate->compile_template_content(
                     $content,
-                    $template->{short},
+                    $template->{short}
                 );
+                my @new_files;
+                for my $new_template (keys %ExtraTemplates) {
+                    if (!$ProcessedTemplates{$new_template}) {
+                        if (!-f $new_template) {
+                            $new_template = "t/data/" . $new_template;
+                        }
+                        #warn $new_template;
+                        if (-f $new_template) {
+                            #warn "adding new template $new_template";
+                            push @new_files, $new_template;
+                        }
+                    }
+                }
+                push @$templates, @{ make_file_list({}, @new_files) };
             }
         }
+        print STDOUT "return _M\n";
         return;
     }
 
@@ -119,26 +144,26 @@ sub get_options {
     my $compile = 0;
     my $list = 0;
 
-    my $start_tag = exists $ENV{JEMPLATE_START_TAG}
-        ? $ENV{JEMPLATE_START_TAG}
+    my $start_tag = exists $ENV{LEMPLATE_START_TAG}
+        ? $ENV{LEMPLATE_START_TAG}
         : undef;
-    my $end_tag = exists $ENV{JEMPLATE_END_TAG}
-        ? $ENV{JEMPLATE_END_TAG}
+    my $end_tag = exists $ENV{LEMPLATE_END_TAG}
+        ? $ENV{LEMPLATE_END_TAG}
         : undef;
-    my $pre_chomp = exists $ENV{JEMPLATE_PRE_CHOMP}
-        ? $ENV{JEMPLATE_PRE_CHOMP}
+    my $pre_chomp = exists $ENV{LEMPLATE_PRE_CHOMP}
+        ? $ENV{LEMPLATE_PRE_CHOMP}
         : undef;
-    my $post_chomp = exists $ENV{JEMPLATE_POST_CHOMP}
-        ? $ENV{JEMPLATE_POST_CHOMP}
+    my $post_chomp = exists $ENV{LEMPLATE_POST_CHOMP}
+        ? $ENV{LEMPLATE_POST_CHOMP}
         : undef;
-    my $trim = exists $ENV{JEMPLATE_TRIM}
-        ? $ENV{JEMPLATE_TRIM}
+    my $trim = exists $ENV{LEMPLATE_TRIM}
+        ? $ENV{LEMPLATE_TRIM}
         : undef;
-    my $anycase = exists $ENV{JEMPLATE_ANYCASE}
-        ? $ENV{JEMPLATE_ANYCASE}
+    my $anycase = exists $ENV{LEMPLATE_ANYCASE}
+        ? $ENV{LEMPLATE_ANYCASE}
         : undef;
-    my $eval_javascript = exists $ENV{JEMPLATE_EVAL_JAVASCRIPT}
-        ? $ENV{JEMPLATE_EVAL_JAVASCRIPT}
+    my $eval_javascript = exists $ENV{LEMPLATE_EVAL_JAVASCRIPT}
+        ? $ENV{LEMPLATE_EVAL_JAVASCRIPT}
         : 1;
 
     my $source  = 0;
@@ -146,6 +171,7 @@ sub get_options {
     my ($ajax, $json, $xxx, $xhr, $compact, $minify);
 
     my $help = 0;
+    my @include_paths;
 
     GetOptions(
         "compile|c"     => \$compile,
@@ -168,6 +194,7 @@ sub get_options {
         "xxx"           => \$xxx,
         "xhr:s"         => \$xhr,
 
+        "include_path"  => \@include_paths,
         "compact"       => \$compact,
         "minify:s"      => \$minify,
 
@@ -199,6 +226,7 @@ sub get_options {
     $options->{TRIM} = $trim if defined $trim;
     $options->{ANYCASE} = $anycase if defined $anycase;
     $options->{EVAL_JAVASCRIPT} = $eval_javascript if defined $eval_javascript;
+    $options->{INCLUDE_PATH} = \@include_paths;
 
     return (
         $options,
@@ -370,17 +398,23 @@ sub compile_template_content {
     die "Invalid arguments in call to Lemplate->compile_template_content"
       unless @_ == 3;
     my ($self, $template_content, $template_name) = @_;
+    $TemplateName = $template_name;
     my $parser = Lemplate::Parser->new( ref($self) ? %$self : () );
     my $parse_tree = $parser->parse(
         $template_content, {name => $template_name}
     ) or die $parser->error;
     my $output =
-        "Lemplate.templateMap['$template_name'] = " .
+        "-- $template_name\n" .
+        "template_map['$template_name'] = " .
         $parse_tree->{BLOCK} .
         "\n";
     for my $function_name (sort keys %{$parse_tree->{DEFBLOCKS}}) {
+        my $name = "$template_name/$function_name";
+        next if $ProcessedTemplates{$name};
+        #warn "seen $name";
+        $ProcessedTemplates{$name} = 1;
         $output .=
-            "Lemplate.templateMap['$function_name'] = " .
+            "template_map['$name'] = " .
             $parse_tree->{DEFBLOCKS}{$function_name} .
             "\n";
     }
@@ -389,22 +423,141 @@ sub compile_template_content {
 
 sub _preamble {
     return <<'...';
-/*
-   This JavaScript code was generated by Lemplate, the JavaScript
+--[[
+   This Lua code was generated by Lemplate, the Lua
    Template Toolkit. Any changes made to this file will be lost the next
    time the templates are compiled.
 
-   Copyright 2006-2014 - Ingy döt Net - All rights reserved.
-*/
+   Copyright 2016 - Yichun Zhang (agentzh) - All rights reserved.
 
-var Lemplate;
-if (typeof(exports) == 'object') {
-    Lemplate = require("lemplate").Lemplate;
+   Copyright 2006-2014 - Ingy döt Net - All rights reserved.
+]]
+
+local gsub = ngx.re.gsub
+local concat = table.concat
+local type = type
+local math_floor = math.floor
+local table_maxn = table.maxn
+
+local _M = {
+    version = '0.01'
 }
 
-if (typeof(Lemplate) == 'undefined')
-    throw('Lemplate.js must be loaded before any Lemplate template files');
+local template_map = {}
 
+local function tt2_true(v)
+    return v and v ~= 0 and v ~= "" and v ~= '0'
+end
+
+local function tt2_not(v)
+    return not v or v == 0 or v == "" or v == '0'
+end
+
+local context_meta = {}
+
+function context_meta.plugin(context, name, args)
+    if name == "iterator" then
+        local list = args[1]
+        local count = table_maxn(list)
+        return { list = list, count = 1, max = count - 1, index = 0, size = count, first = true, last = false, prev = "" }
+    else
+        return error("unknown iterator: " .. name)
+    end
+end
+
+function context_meta.process(context, file)
+    local f = template_map[file]
+    if not f then
+        return error("file error - " .. file .. ": not found")
+    end
+    return f(context)
+end
+
+function context_meta.include(context, file)
+    local f = template_map[file]
+    if not f then
+        return error("file error - " .. file .. ": not found")
+    end
+    return f(context)
+end
+
+context_meta = { __index = context_meta }
+
+local function stash_get(stash, k)
+    local v
+    if type(k) == "table" then
+        v = stash
+        for i = 1, #k, 2 do
+            local key = k[i]
+            local typ = k[i + 1]
+            if type(typ) == "table" then
+                local value = v[key]
+                if type(value) == "function" then
+                    return value()
+                end
+                if value then
+                    return value
+                end
+                if key == "size" then
+                    if type(v) == "table" then
+                        return #v
+                    else
+                        return 1
+                    end
+                else
+                    return error("virtual method " .. key .. " not supported")
+                end
+            end
+            if type(key) == "number" and key == math_floor(key) and key >= 0 then
+                key = key + 1
+            end
+            if type(v) ~= "table" then
+                return nil
+            end
+            v = v[key]
+        end
+    else
+        v = stash[k]
+    end
+    if type(v) == "function" then
+        return v()
+    end
+    return v
+end
+
+local function stash_set(stash, k, v, default)
+    if default then
+        local old = stash[k]
+        if old == nil then
+            stash[k] = v
+        end
+    else
+        stash[k] = v
+    end
+end
+
+function _M.process(file, params)
+    local stash = params
+    local context = {
+        stash = stash,
+        filter = function (bits, name, params)
+            local s = concat(bits)
+            if name == "html" then
+                s = gsub(s, "&", '&amp;', "jo")
+                s = gsub(s, "<", '&lt;', "jo");
+                s = gsub(s, ">", '&gt;', "jo");
+                s = gsub(s, '"', '&quot;', "jo"); -- " end quote for emacs
+                return s
+            end
+        end
+    }
+    context = setmetatable(context, context_meta)
+    local f = template_map[file]
+    if not f then
+        return error("file error - " .. file .. ": not found")
+    end
+    return f(context)
+end
 ...
 }
 

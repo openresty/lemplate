@@ -2,7 +2,7 @@ package Lemplate::Directive;
 use strict;
 use warnings;
 
-our $OUTPUT = 'output +=';
+our $OUTPUT = 'i = i + 1 output[i] =';
 our $WHILE_MAX = 1000;
 
 # parser state variable
@@ -11,34 +11,31 @@ our $INJAVASCRIPT = 0;
 
 sub new {
     my $class = shift;
-    
+
     return bless {}, $class
 }
 
 sub template {
     my ($class, $block) = @_;
 
-    return "function() { return ''; }" unless $block =~ /\S/;
+    return "function() return '' end" unless $block =~ /\S/;
 
     return <<"...";
-function(context) {
-    if (! context) throw('Lemplate function called without context\\n');
-    var stash = context.stash;
-    var output = '';
+function (context)
+    if not context then
+        return error("Lemplate function called without context\\n")
+    end
+    local stash = context.stash
+    local output = {}
+    local i = 0
 
-    try {
 $block
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
 
-    return output;
-}
+    return output
+end
 ...
 }
- 
+
 # Try to do 1 .. 10 expansions
 sub _attempt_range_expand_val ($) {
     my $val = shift;
@@ -57,7 +54,7 @@ sub _attempt_range_expand_val ($) {
 sub textblock {
     my ($class, $text) = @_;
     return $text if $INJAVASCRIPT;
-    return "$OUTPUT " . $class->text($text) . ';';
+    return "$OUTPUT " . $class->text($text);
 }
 
 #------------------------------------------------------------------------
@@ -97,9 +94,9 @@ sub ident {
         $ident = $ident->[0];
     }
     else {
-        $ident = '[' . join(', ', @$ident) . ']';
+        $ident = '{' . join(', ', @$ident) . '}';
     }
-    return "stash.get($ident)";
+    return "stash_get(stash, $ident)";
 }
 
 
@@ -115,12 +112,12 @@ sub assign {
             $var = $var->[0];
         }
         else {
-            $var = '[' . join(', ', @$var) . ']';
+            $var = '{' . join(', ', @$var) . '}';
         }
     }
     $val =  _attempt_range_expand_val $val;
     $val .= ', 1' if $default;
-    return "stash.set($var, $val)";
+    return "stash_set(stash, $var, $val)";
 }
 
 
@@ -134,15 +131,15 @@ sub args {
     push(@$args, '{ ' . join(', ', @$hash) . ' }')
         if @$hash;
 
-    return '[]' unless @$args;
-    return '[ ' . join(', ', @$args) . ' ]';
+    return '{}' unless @$args;
+    return '{ ' . join(', ', @$args) . ' }';
 }
 
 
 #------------------------------------------------------------------------
 # filenames(\@names)
 #------------------------------------------------------------------------
-    
+
 sub filenames {
     my ($class, $names) = @_;
     if (@$names > 1) {
@@ -152,22 +149,22 @@ sub filenames {
         $names = shift @$names;
     }
     return $names;
-}   
-    
-        
+}
+
+
 #------------------------------------------------------------------------
 # get($expr)                                                    [% foo %]
 #------------------------------------------------------------------------
 
 sub get {
     my ($class, $expr) = @_;
-    return "$OUTPUT $expr;";
-}   
+    return "$OUTPUT $expr";
+}
 
 sub block {
     my ($class, $block) = @_;
     return join "\n", map {
-        s/^#(?=line \d+)/\/\//gm;
+        s/^#(?=line \d+)/-- /gm;
         $_;
     } @{ $block || [] };
 }
@@ -214,7 +211,7 @@ sub default {
 
 
 #------------------------------------------------------------------------
-# include(\@nameargs)                    [% INCLUDE template foo = bar %] 
+# include(\@nameargs)                    [% INCLUDE template foo = bar %]
 #         # => [ [ $file, ... ], \@args ]
 #------------------------------------------------------------------------
 
@@ -223,13 +220,16 @@ sub include {
     my ($file, $args) = @$nameargs;
     my $hash = shift @$args;
     $file = $class->filenames($file);
-    $file .= @$hash ? ', { ' . join(', ', @$hash) . ' }' : '';
-    return "$OUTPUT context.include($file);"; 
-}   
-    
-        
+    (my $raw_file = $file) =~ s/^'|'$//g;
+    $Lemplate::ExtraTemplates{$raw_file} = 1;
+    my $file2 = "'$Lemplate::TemplateName/$raw_file'";
+    my $str_args = (@$hash ? ', { ' . join(', ', @$hash) . ' }' : '');
+    return "$OUTPUT context.include(context, template_map['$Lemplate::TemplateName/$raw_file'] and $file2 or $file$str_args)";
+}
+
+
 #------------------------------------------------------------------------
-# process(\@nameargs)                    [% PROCESS template foo = bar %] 
+# process(\@nameargs)                    [% PROCESS template foo = bar %]
 #         # => [ [ $file, ... ], \@args ]
 #------------------------------------------------------------------------
 
@@ -238,11 +238,13 @@ sub process {
     my ($file, $args) = @$nameargs;
     my $hash = shift @$args;
     $file = $class->filenames($file);
+    (my $raw_file = $file) =~ s/^'|'$//g;
+    $Lemplate::ExtraTemplates{$raw_file} = 1;
     $file .= @$hash ? ', { ' . join(', ', @$hash) . ' }' : '';
-    return "$OUTPUT context.process($file);"; 
-}   
-    
-        
+    return "$OUTPUT context.process(context, $file)";
+}
+
+
 #------------------------------------------------------------------------
 # if($expr, $block, $else)                             [% IF foo < bar %]
 #                                                         ...
@@ -250,20 +252,22 @@ sub process {
 #                                                         ...
 #                                                      [% END %]
 #------------------------------------------------------------------------
-    
+
 sub if {
     my ($class, $expr, $block, $else) = @_;
     my @else = $else ? @$else : ();
     $else = pop @else;
 
-    my $output = "if ($expr) {\n$block\n}\n";
-        
+    my $output = "if tt2_true($expr) then\n$block\n";
+
     foreach my $elsif (@else) {
         ($expr, $block) = @$elsif;
-        $output .= "else if ($expr) {\n$block\n}\n";
-    }   
+        $output .= "elseif tt2_true($expr) then\n$block\n";
+    }
     if (defined $else) {
-        $output .= "else {\n$else\n}\n";
+        $output .= "else\n$else\nend\n";
+    } else {
+        $output .= "end\n";
     }
 
     return $output;
@@ -283,9 +287,9 @@ sub foreach {
     my ($loop_save, $loop_set, $loop_restore, $setiter);
     if ($target) {
         $loop_save =
-            'try { oldloop = ' . $class->ident(["'loop'"]) . ' } finally {}';
-        $loop_set = "stash.data['$target'] = value";
-        $loop_restore = "stash.set('loop', oldloop)";
+            'local oldloop = ' . $class->ident(["'loop'"]);
+        $loop_set = "stash['$target'] = value";
+        $loop_restore = "stash_set(stash, 'loop', oldloop)";
     }
     else {
         die "XXX - Not supported yet";
@@ -299,30 +303,37 @@ sub foreach {
 
     return <<EOF;
 
-// FOREACH 
-(function() {
-    var list = $list;
-    list = new Lemplate.Iterator(list);
-    var retval = list.get_first();
-    var value = retval[0];
-    var done = retval[1];
-    var oldloop;
+-- FOREACH
+do
+    local list = $list
+    local iterator
+    if list.list then
+        iterator = list
+        list = list.list
+    end
     $loop_save
-    stash.set('loop', list);
-    try {
-        while (! done) {
-            $loop_set;
-$block;
-            retval = list.get_next();
-            value = retval[0];
-            done = retval[1];
-        }
-    }
-    catch(e) {
-        throw(context.set_error(e, output));
-    }
-    $loop_restore;
-})();
+    local count
+    if not iterator then
+        count = table_maxn(list)
+        iterator = { count = 1, max = count - 1, index = 0, size = count, first = true, last = false, prev = "" }
+    else
+        count = iterator.size
+    end
+    stash.loop = iterator
+    for idx, value in ipairs(list) do
+        if idx == count then
+            iterator.last = true
+        end
+        iterator.index = idx - 1
+        iterator.count = idx
+        iterator.next = list[idx + 1]
+        $loop_set
+$block
+        iterator.first = false
+        iterator.prev = value
+    end
+    $loop_restore
+end
 EOF
 }
 
@@ -335,16 +346,13 @@ EOF
 
 sub next {
   return <<EOF;
-  retval = list.get_next();
-  value = retval[0];
-  done = retval[1];
-  continue;
+  return error("NEXT not implemented yet")
 EOF
 }
 
 #------------------------------------------------------------------------
-# wrapper(\@nameargs, $block)            [% WRAPPER template foo = bar %] 
-#          # => [ [$file,...], \@args ]    
+# wrapper(\@nameargs, $block)            [% WRAPPER template foo = bar %]
+#          # => [ [$file,...], \@args ]
 #------------------------------------------------------------------------
 sub wrapper {
     my ($class, $nameargs, $block) = @_;
@@ -401,17 +409,24 @@ EOF
 #------------------------------------------------------------------------
 
 sub while {
-    my ($class, $expr, $block) = @_; 
-    
+    my ($class, $expr, $block) = @_;
+
     return <<EOF;
-    
-// WHILE
-var failsafe = $WHILE_MAX;
-while (--failsafe && ($expr)) {
+
+-- WHILE
+do
+    local failsafe = $WHILE_MAX;
+    while $expr do
+        failsafe = failsafe - 1
+        if failsafe <= 0 then
+            break
+        end
 $block
-}
-if (! failsafe)
-    throw("WHILE loop terminated (> $WHILE_MAX iterations)\\n")
+    end
+    if not failsafe then
+        return error("WHILE loop terminated (> $WHILE_MAX iterations)\\n")
+    end
+end
 EOF
 }
 
@@ -488,37 +503,37 @@ sub throw {
     my $info = shift(@$args);
     $type = shift @$type;
 
-    return qq{throw([$type, $info]);};
+    return qq{return error({$type, $info})};
 }
 
 
 #------------------------------------------------------------------------
 # clear()                                                     [% CLEAR %]
-#   
+#
 # NOTE: this is redundant, being hard-coded (for now) into Parser.yp
 #------------------------------------------------------------------------
 
 sub clear {
-    return "output = '';";
+    return "output = {}";
 }
 
 
 #------------------------------------------------------------------------
 # break()                                                     [% BREAK %]
-#   
+#
 # NOTE: this is redundant, being hard-coded (for now) into Parser.yp
 #------------------------------------------------------------------------
 
 sub break {
-    return 'break;';
-}                       
-        
+    return 'break';
+}
+
 #------------------------------------------------------------------------
 # return()                                                   [% RETURN %]
 #------------------------------------------------------------------------
 
 sub return {
-    return "return output;"
+    return "return output"
 }
 
 
@@ -527,8 +542,8 @@ sub return {
 #------------------------------------------------------------------------
 
 sub stop {
-    return "throw('Lemplate.STOP\\n' + output);";
-}   
+    return "return error('Lemplate.STOP\\n' .. concat(output))";
+}
 
 
 #------------------------------------------------------------------------
@@ -543,8 +558,8 @@ sub use {
     $alias ||= $file;
     $args = &args($class, $args);
     $file .= ", $args" if $args;
-    return "// USE\n"
-         . "stash.set($alias, context.plugin($file));";
+    return "-- USE\n"
+         . "stash_set(stash, $alias, context.plugin(context, $file))";
 }
 
 
@@ -562,7 +577,7 @@ sub raw {
 #    $file .= ", $args" if $args;
     $file =~ s/'|"//g;
     return "// RAW\n"
-         . "stash.set($alias, $file);";
+         . "stash_set(stash, $alias, $file)";
 }
 
 
@@ -580,24 +595,27 @@ sub filter {
     $name .= ", $args" if $args;
     return <<EOF;
 
-// FILTER
-$OUTPUT (function() {
-    var output = '';
+-- FILTER
+local value
+do
+    local output = {}
+    local i = 0
 
 $block
 
-    return context.filter(output, $name);
-})();
+    value = context.filter(output, $name)
+end
+$OUTPUT value
 EOF
 }
 
 sub quoted {
     my $class = shift;
     if ( @_ && ref($_[0]) ) {
-        return join( " + ", @{$_[0]} );
+        return join( " .. ", @{$_[0]} );
     }
-    return "throw('QUOTED called with unknown arguments in Lemplate');";
-}   
+    return "return error('QUOTED called with unknown arguments in Lemplate')";
+}
 
 #------------------------------------------------------------------------
 # macro($name, $block, \@args)
@@ -649,12 +667,12 @@ EOF
 stash.set('$ident', function () {
     var output = '';
     var args = {};
-    
+
     var fargs = Array.prototype.slice.call(arguments);
-    args.arguments = Array.prototype.slice.call(arguments);   
-    
+    args.arguments = Array.prototype.slice.call(arguments);
+
     if (typeof arguments[0] == 'object') args = arguments[0];
-    
+
     context.stash.clone(args);
     try {
 $block
@@ -664,7 +682,7 @@ $block
         throw(error);
     }
 
-    context.stash.declone(); 
+    context.stash.declone();
     return output;});
 
 EOF
@@ -693,7 +711,7 @@ sub capture {
 })();
 EOF
 
-}   
+}
 
 BEGIN {
     return;  # Comment out this line to get callback traces
@@ -704,17 +722,17 @@ BEGIN {
     for my $name (keys %$stash) {
         my $glob = $stash->{$name};
         if (*$glob{CODE}) {
-            my $code = *$glob{CODE};    
+            my $code = *$glob{CODE};
             no warnings 'redefine';
             $stash->{$name} = sub {
                 warn "Calling $name(@_)\n";
                 &$code(@_);
             };
         }
-    } 
+    }
 }
 
-    
+
 1;
 
 __END__

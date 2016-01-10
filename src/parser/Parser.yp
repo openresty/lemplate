@@ -145,8 +145,8 @@ condition:  IF expr ';'
 	      block else END	    { $factory->if(@_[2, 4, 5])           }
 	|   atomexpr IF expr	    { $factory->if(@_[3, 1])              }
 	|   UNLESS expr ';'
-	      block else END	    { $factory->if("($_[2]) == false", @_[4, 5])  }
-	|   atomexpr UNLESS expr    { $factory->if("($_[3]) == false", $_[1])     }
+	      block else END	    { $factory->if("tt2_not($_[2])", @_[4, 5])  }
+	|   atomexpr UNLESS expr    { $factory->if("tt2_not($_[3])", $_[1])     }
 ;
 
 else:	    ELSIF expr ';' 
@@ -299,9 +299,9 @@ term:	    lterm
 	|   sterm
 ;
 
-lterm:	    '[' list  ']'	    { "[ $_[2] ]"                         }
-	|   '[' range ']'           { "[ $_[2] ]"                         }
-	|   '['       ']'           { "[ ]"                               }
+lterm:	    '[' list  ']'	    { "{ $_[2] }"                         }
+	|   '[' range ']'           { "{ $_[2] }"                         }
+	|   '['       ']'           { "{ }"                               }
 	|   '{' hash  '}'	    { "{ $_[2]  }"                        }
 ;
 
@@ -330,8 +330,8 @@ params:	    params param	    { "$_[1], $_[2]"                      }
 	|   param
 ;
 
-param:      LITERAL ASSIGN expr     { "$_[1]: $_[3]"                    }
-        |   item ASSIGN expr        { "$_[1]: $_[3]"                    }
+param:      LITERAL ASSIGN expr     { "[$_[1]] = $_[3]"                    }
+        |   item ASSIGN expr        { "[$_[1]] = $_[3]"                    }
 ;
 
 ident:      ident DOT node	    { push(@{$_[1]}, @{$_[3]}); $_[1]     }
@@ -355,14 +355,14 @@ item:	    IDENT		    { "'$_[1]'"                           }
 expr:	    expr BINOP expr	    { "$_[1] $_[2] $_[3]"                 }
 	|   expr '/' expr	    { "$_[1] $_[2] $_[3]"                 }
 	|   expr '+' expr	    { "$_[1] $_[2] $_[3]"                 }
-	|   expr DIV expr	    { "Math.floor($_[1] / $_[3])"                }
+	|   expr DIV expr	    { "math_floor($_[1] / $_[3])"         }
 	|   expr MOD expr	    { "$_[1] % $_[3]"                     }
 	|   expr CMPOP expr	    { "$_[1] $CMPOP{ $_[2] } $_[3]"       }
-	|   expr CAT expr	    { "$_[1]  + $_[3]"                    }
-	|   expr AND expr	    { "$_[1] && $_[3]"                    }
-	|   expr OR expr	    { "$_[1] || $_[3]"                    }
-	|   NOT expr		    { "! $_[2]"                           }
-	|   expr '?' expr ':' expr  { "$_[1] ? $_[3] : $_[5]"             }
+	|   expr CAT expr	    { "$_[1] .. $_[3]"                    }
+	|   expr AND expr	    { "tt2_true($_[1]) and tt2_true($_[3])"                   }
+	|   expr OR expr	    { "tt2_true($_[1]) or tt2_true($_[3])"                    }
+	|   NOT expr		    { "tt2_not($_[2])"                         }
+	|   expr '?' expr ':' expr  { "tt2_true($_[1]) and $_[3] or $_[5]"          }
 	|   '(' assign ')'	    { $factory->assign(@{$_[2]})          }
 	|   '(' expr ')'	    { "($_[2])"                           }
 	|   term		

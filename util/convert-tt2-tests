@@ -1,0 +1,90 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $found;
+my $expect_input = 1;
+my $input = '';
+my $output = '';
+my @rec;
+my $lineno = 1;
+
+while (<>) {
+    next if /^\#/;
+
+    if (/^-- stop --/) {
+        last;
+    }
+
+    if (!$found) {
+        if (/^__DATA__$/) {
+            $found = 1;
+        }
+        next;
+    }
+
+    if ($expect_input) {
+        if (/^-- test --/) {
+            next;
+        }
+
+        if (/^-- expect --/) {
+            undef $expect_input;
+            next;
+        }
+
+        $input .= $_;
+    } else {
+        if (/^-- test --/) {
+            $input =~ s/^\n+//sg;
+            $input =~ s/\n\n+$/\n/sg;
+            $output =~ s/^\n+//sg;
+            $output =~ s/\n\n+$/\n/sg;
+            push @rec, { line => $lineno, in => $input, out => $output };
+            undef $input;
+            undef $output;
+            $expect_input = 1;
+            $lineno = $.;
+            next;
+        }
+
+        $output .= $_;
+    }
+}
+
+#use Data::Dumper;
+#print Dumper(\@rec);
+
+print <<'_EOC_';
+# vim:set ft= ts=4 sw=4 et fdm=marker:
+
+use t::TestLemplate;
+
+plan tests => 1 * blocks();
+
+$ENV{LEMPLATE_POST_CHOMP} = 1;
+
+run_tests;
+
+__DATA__
+
+_EOC_
+
+$rec[-1]{last} = 1;
+my $i = 1;
+for my $r (@rec) {
+    print <<_EOC_;
+=== TEST $i: line $r->{line}
+--- tt2
+$r->{in}
+--- out
+$r->{out}
+_EOC_
+
+    if (!$r->{last}) {
+        print "\n\n";
+    }
+} continue {
+    $i++;
+}
