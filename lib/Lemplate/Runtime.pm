@@ -71,7 +71,7 @@ __END__
 
 =head1 NAME
 
-Lemplate::Runtime - Perl Module containing the Lemplate JavaScript Runtime
+Lemplate::Runtime - Perl Module containing the Lemplate Lua Runtime
 
 =head1 SYNOPSIS
 
@@ -82,7 +82,7 @@ Lemplate::Runtime - Perl Module containing the Lemplate JavaScript Runtime
 
 This module is auto-generated and used internally by Lemplate. It
 contains subroutines that simply return various parts of the Lemplate
-JavaScript Runtime code.
+Lua Runtime code.
 
 =head1 METHODS
 

@@ -7,11 +7,11 @@ Table of Contents
 
 * [Name](#name)
 * [Status](#status)
-* [SYNOPSIS](#synopsis)
-* [DESCRIPTION](#description)
-* [HOWTO](#howto)
-* [PUBLIC API](#public-api)
-* [CURRENT SUPPORT](#current-support)
+* [Synopsis](#synopsis)
+* [Description](#description)
+* [HowTo](#howto)
+* [Public API](#public-api)
+* [Current Support](#current-support)
 * [Community](#community)
     * [English Mailing List](#english-mailing-list)
     * [Chinese Mailing List](#chinese-mailing-list)
@@ -26,18 +26,16 @@ Table of Contents
 
 **WARNING** This is still under early development. Check back often.
 
-# SYNOPSIS
+# Synopsis
 
-```lua
-local templates = require "myapp.templates"
-ngx.print(tempaltes.process("homepage.html", { var1 = 32, var2 = "foo" }))
-```
+    local templates = require "myapp.templates"
+    ngx.print(tempaltes.process("homepage.html", { var1 = 32, var2 = "foo" }))
 
-From the commandline:
+From the command-line:
 
     lemplate --compile path/to/lemplate/directory/ > myapp/templates.lua
 
-# DESCRIPTION
+# Description
 
 Lemplate is a templating framework for OpenResty/Lua that is built over
 Perl's Template Toolkit (TT2).
@@ -55,50 +53,42 @@ and powerful way to do web stuff.
 
 [Back to TOC](#table-of-contents)
 
-# HOWTO
+# HowTo
 
 Lemplate comes with a command line tool call `lemplate` that you use to
 precompile your templates into a Lua module file. For example if you have
 a template directory called `templates` that contains:
 
-```console
-$ ls templates/
-body.html
-footer.html
-header.html
-```
+    $ ls templates/
+    body.html
+    footer.html
+    header.html
 
 You might run this command:
 
-```console
-$ lemplate --compile template/* > myapp/templates.lua
-```
+    $ lemplate --compile template/* > myapp/templates.lua
 
 This will compile all the templates into one Lua module file which can be loaded in your
 main OpenResty/Lua application as the module `myapp.templates`.
 
 Now all you need to do is load the Lua module file in your OpenResty app:
 
-```lua
-local templates = require "myapp.templates"
-```
+    local templates = require "myapp.templates"
 
 and do the HTML page rendering:
 
-```lua
-local results = templates.process("some-page.html",
-                                  { var1 = val1, var2 = val2, ...})
-```
+    local results = templates.process("some-page.html",
+                                      { var1 = val1, var2 = val2, ...})
 
 Now you have Lemplate support for these templates in your OpenResty application.
 
 [Back to TOC](#table-of-contents)
 
-# PUBLIC API
+# Public API
 
 The Lemplate Lua runtime module has the following API method:
 
-- process(template-name, data);
+- process(template-name, data)
 
     The `template-name` is a string like `'body.html'` that is the name of
     the top level template that you wish to process.
@@ -110,12 +100,12 @@ The Lemplate Lua runtime module has the following API method:
 
 [Back to TOC](#table-of-contents)
 
-# CURRENT SUPPORT
+# Current Support
 
-The goal of Jemplate is to support all of the Template Toolkit features
+The goal of Lemplate is to support all of the Template Toolkit features
 that can possibly be supported.
 
-Jemplate now supports almost all the TT directives, including:
+Lemplate now supports almost all the TT directives, including:
 
     * Plain text
     * [% [GET] variable %]
@@ -141,7 +131,7 @@ Jemplate now supports almost all the TT directives, including:
     * [% LAST %]
     * [% CLEAR %]
     * [%# this is a comment %]
-    * [% MACRO name(param1, param2) BLOCK %] ... [% END %]  
+    * [% MACRO name(param1, param2) BLOCK %] ... [% END %]
 
 ALL of the string virtual functions are supported.
 
@@ -156,52 +146,45 @@ in the distro for a list of all features and their progress.
 
 [Back to TOC](#table-of-contents)
 
-Community
-=========
+# Community
 
-[Back to TOC](#table-of-contents)
-
-English Mailing List
---------------------
+## English Mailing List
 
 The [openresty-en](https://groups.google.com/group/openresty-en) mailing list is for English speakers.
 
 [Back to TOC](#table-of-contents)
 
-Chinese Mailing List
---------------------
+## Chinese Mailing List
 
 The [openresty](https://groups.google.com/group/openresty) mailing list is for Chinese speakers.
 
 [Back to TOC](#table-of-contents)
 
-Code Repository
-===============
+# Code Repository
 
 The bleeding edge code is available via Git at
 git://github.com/openresty/lemplate.git
 
 [Back to TOC](#table-of-contents)
 
-Bugs and Patches
-================
+# Bugs and Patches
 
 Please submit bug reports, wishlists, or patches by
 
 1. creating a ticket on the [GitHub Issue Tracker](https://github.com/openresty/lua-nginx-module/issues),
-2. or posting to the [OpenResty community](#community).
+2. or posting to the ["Community"](#community).
 
 [Back to TOC](#table-of-contents)
 
 # CREDIT
 
-This project is based on Ingy dot Net's excellent [Jemplate](http://www.jemplate.net/) project.
+This project is based on Ingy dot Net's excellent [Jemplate](https://metacpan.org/pod/Jemplate) project.
 
 [Back to TOC](#table-of-contents)
 
 # AUTHOR
 
-Yichun Zhang (agentzh), &lt;agentzh@gmail.com&gt;, CloudFlare Inc.
+Yichun Zhang (agentzh), <agentzh@gmail.com>, CloudFlare Inc.
 
 [Back to TOC](#table-of-contents)
 
@@ -211,7 +194,7 @@ Copyright (C) 2016 Yichun Zhang (agentzh).  All Rights Reserved.
 
 Copyright (C) 1996-2014 Andy Wardley.  All Rights Reserved.
 
-Copyright (c) 2006-2014. Ingy dÃ¶t Net. All rights reserved.
+Copyright (c) 2006-2014. Ingy döt Net. All rights reserved.
 
 Copyright (C) 1998-2000 Canon Research Centre Europe Ltd
 
@@ -221,8 +204,8 @@ This module is free software; you can redistribute it and/or modify it under the
 
 # See Also
 
-* Perl TT2 Reference Manual: http://www.template-toolkit.org/docs/manual/index.html
-* Jemplate for compiling TT2 templates to client-side JavaScript: http://www.jemplate.net/
+- Perl TT2 Reference Manual: http://www.template-toolkit.org/docs/manual/index.html
+- Jemplate for compiling TT2 templates to client-side JavaScript: http://www.jemplate.net/
 
 [Back to TOC](#table-of-contents)
 

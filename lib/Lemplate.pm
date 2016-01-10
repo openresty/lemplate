@@ -567,91 +567,75 @@ __END__
 
 =encoding utf8
 
-=head1 NAME
+=head1 Name
 
-Lemplate - JavaScript Templating with Template Toolkit
+Lemplate - OpenResty/Lua template framework implementing Perl's TT2 templating language
 
-=head1 NAME
+=head1 Status
 
-Lemplate - JavaScript Templating with Template Toolkit
+B<WARNING> This is still under early development. Check back often.
 
-=head1 SYNOPSIS
+=head1 Synopsis
 
-    var data = Ajax.get('url/data.json');
-    var elem = document.getElementById('some-div');
-    elem.innerHTML = Lemplate.process('my-template.html', data);
+    local templates = require "myapp.templates"
+    ngx.print(tempaltes.process("homepage.html", { var1 = 32, var2 = "foo" }))
 
-or:
+From the command-line:
 
-    var data = Ajax.get('url/data.json');
-    var elem = document.getElementById('some-div');
-    Lemplate.process('my-template.html', data, elem);
+    lemplate --compile path/to/lemplate/directory/ > myapp/templates.lua
 
-or simply:
+=head1 Description
 
-    Lemplate.process('my-template.html', 'url/data.json', '#some-div');
-
-or, with jQuery.js:
-
-    jQuery.getJSON("url/data.json", function(data) {
-        Lemplate.process('my-template.html', data, '#some-div');
-    });
-
-From the commandline:
-
-    lemplate --runtime --compile path/to/lemplate/directory/ > lemplate.js
-
-=head1 DESCRIPTION
-
-Lemplate is a templating framework for JavaScript that is built over
+Lemplate is a templating framework for OpenResty/Lua that is built over
 Perl's Template Toolkit (TT2).
 
 Lemplate parses TT2 templates using the TT2 Perl framework, but with a
 twist. Instead of compiling the templates into Perl code, it compiles
-them into JavaScript.
+them into Lua that can run on OpenResty.
 
-Lemplate then provides a JavaScript runtime module for processing
-the template code. Presto, we have full featured JavaScript
+Lemplate then provides a Lua runtime module for processing
+the template code. Presto, we have full featured Lua
 templating language!
 
-Combined with JSON and xmlHttpRequest, Lemplate provides a really simple
-and powerful way to do Ajax stuff.
+Combined with OpenResty, Lemplate provides a really simple
+and powerful way to do web stuff.
 
-=head1 HOWTO
+=head1 HowTo
 
 Lemplate comes with a command line tool call C<lemplate> that you use to
-precompile your templates into a JavaScript file. For example if you have
+precompile your templates into a Lua module file. For example if you have
 a template directory called C<templates> that contains:
 
-    > ls templates/
+    $ ls templates/
     body.html
     footer.html
     header.html
 
 You might run this command:
 
-    > lemplate --compile template/* > js/lemplates.js
+    $ lemplate --compile template/* > myapp/templates.lua
 
-This will compile all the templates into one JavaScript file.
+This will compile all the templates into one Lua module file which can be loaded in your
+main OpenResty/Lua application as the module C<myapp.templates>.
 
-You also need to generate the Lemplate runtime.
+Now all you need to do is load the Lua module file in your OpenResty app:
 
-    > lemplate --runtime > js/Lemplate.js
+    local templates = require "myapp.templates"
 
-Now all you need to do is include these two files in your HTML:
+and do the HTML page rendering:
 
-    <script src="js/Lemplate.js" type="text/javascript"></script>
-    <script src="js/lemplates.js" type="text/javascript"></script>
+    local results = templates.process("some-page.html",
+                                      { var1 = val1, var2 = val2, ...})
 
-Now you have Lemplate support for these templates in your HTML document.
+Now you have Lemplate support for these templates in your OpenResty application.
 
-=head1 PUBLIC API
+=head1 Public API
 
-The Lemplate.js JavaScript runtime module has the following API method:
+The Lemplate Lua runtime module has the following API method:
 
 =over
 
-=item Lemplate.process(template-name, data, target);
+=item process(template-name, data)
 
 The C<template-name> is a string like C<'body.html'> that is the name of
 the top level template that you wish to process.
@@ -659,114 +643,42 @@ the top level template that you wish to process.
 The optional C<data> specifies the data object to be used by the
 templates. It can be an object, a function or a url. If it is an object,
 it is used directly. If it is a function, the function is called and the
-returned object is used. If it is a url, an asynchronous <Ajax.get> is
-performed. The result is expected to be a JSON string, which gets turned
-into an object.
-
-The optional C<target> can be an HTMLElement reference, a function or a
-string beginning with a C<#> char. If the target is omitted, the
-template result is returned. If it is a function, the function is called
-with the result. If it is a string, the string is used as an id to find
-an HTMLElement.
-
-If an HTMLElement is used (by id or directly) then the innerHTML
-property is set to the template processing result.
+returned object is used.
 
 =back
 
-The Lemplate.pm Perl module has the following public class methods,
-although you won't likely need to use them directly. Normally, you just
-use the C<lemplate> command line tool.
-
-=over
-
-=item Lemplate->compile_template_files(@template_file_paths);
-
-Take a list of template file paths and compile them into a module of
-functions. Returns the text of the module.
-
-=item Lemplate->compile_template_content($content, $template_name);
-
-Compile one template whose content is in memory. You must provide a
-unique template name. Returns the JavaScript text result of the
-compilation.
-
-=item Lemplate->compile_module($module_path, \@template_file_paths);
-
-Similar to `compile_template_files`, but prints to result to the
-$module_path. Returns 1 if successful, undef if error.
-
-=item Lemplate->compile_module_cached($module_path, \@template_file_paths);
-
-Similar to `compile_module`, but only compiles if one of the templates
-is newer than the module. Returns 1 if successful compile, 0 if no
-compile due to cache, undef if error.
-
-=back
-
-=head1 AJAX AND JSON METHODS
-
-Lemplate comes with builtin Ajax and JSON support.
-
-=over
-
-=item Ajax.get(url, [callback]);
-
-Does a GET operation to the url.
-
-If a callback is provided, the operation is asynchronous, and the data
-is passed to the callback. Otherwise, the operation is synchronous and
-the data is returned.
-
-=item Ajax.post(url, data, [callback]);
-
-Does a POST operation to the url.
-
-Same callback rules as C<get> apply.
-
-=item JSON.stringify(object);
-
-Return the JSON serialization of an object.
-
-=item JSON.parse(jsonString);
-
-Turns a JSON string into an object and returns the object.
-
-=back
-
-=head1 CURRENT SUPPORT
+=head1 Current Support
 
 The goal of Lemplate is to support all of the Template Toolkit features
 that can possibly be supported.
 
 Lemplate now supports almost all the TT directives, including:
 
-  * Plain text
-  * [% [GET] variable %]
-  * [% CALL variable %]
-  * [% [SET] variable = value %]
-  * [% DEFAULT variable = value ... %]
-  * [% INCLUDE [arguments] %]
-  * [% PROCESS [arguments] %]
-  * [% BLOCK name %]
-  * [% FILTER filter %] text... [% END %]
-  * [% JAVASCRIPT %] code... [% END %]
-  * [% WRAPPER template [variable = value ...] %]
-  * [% IF condition %]
-  * [% ELSIF condition %]
-  * [% ELSE %]
-  * [% SWITCH variable %]
-  * [% CASE [{value|DEFAULT}] %]
-  * [% FOR x = y %]
-  * [% WHILE expression %]
-  * [% RETURN %]
-  * [% THROW type message %]
-  * [% STOP %]
-  * [% NEXT %]
-  * [% LAST %]
-  * [% CLEAR %]
-  * [%# this is a comment %]
-  * [% MACRO name(param1, param2) BLOCK %] ... [% END %]
+    * Plain text
+    * [% [GET] variable %]
+    * [% CALL variable %]
+    * [% [SET] variable = value %]
+    * [% DEFAULT variable = value ... %]
+    * [% INCLUDE [arguments] %]
+    * [% PROCESS [arguments] %]
+    * [% BLOCK name %]
+    * [% FILTER filter %] text... [% END %]
+    * [% WRAPPER template [variable = value ...] %]
+    * [% IF condition %]
+    * [% ELSIF condition %]
+    * [% ELSE %]
+    * [% SWITCH variable %]
+    * [% CASE [{value|DEFAULT}] %]
+    * [% FOR x = y %]
+    * [% WHILE expression %]
+    * [% RETURN %]
+    * [% THROW type message %]
+    * [% STOP %]
+    * [% NEXT %]
+    * [% LAST %]
+    * [% CLEAR %]
+    * [%# this is a comment %]
+    * [% MACRO name(param1, param2) BLOCK %] ... [% END %]
 
 ALL of the string virtual functions are supported.
 
@@ -779,73 +691,67 @@ MANY of the standard filters are implemented.
 The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.
 
-=head1 BROWSER SUPPORT
+=head1 Community
 
-Tested successfully in:
+=head2 English Mailing List
 
-    * Firefox Mac/Win32/Linux
-    * IE 6.0
-    * Safari
-    * Opera
-    * Konqueror
+The L<openresty-en|https://groups.google.com/group/openresty-en> mailing list is for English speakers.
 
-All tests run 100% successful in the above browsers.
+=head2 Chinese Mailing List
 
-=head1 DEVELOPMENT
+The L<openresty|https://groups.google.com/group/openresty> mailing list is for Chinese speakers.
+
+=head1 Code Repository
 
 The bleeding edge code is available via Git at
-git://github.com/ingydotnet/lemplate.git
+git://github.com/openresty/lemplate.git
 
-You can run the runtime tests directly from
-http://svn.lemplate.net/repo/trunk/tests/run/index.html or from the
-corresponding CPAN or JSAN directories.
+=head1 Bugs and Patches
 
-Lemplate development is being discussed at irc://irc.freenode.net/#lemplate
+Please submit bug reports, wishlists, or patches by
 
-If you want a committer bit, just ask ingy on the irc channel.
+=over
+
+=item 1.
+
+creating a ticket on the L<GitHub Issue Tracker|https://github.com/openresty/lua-nginx-module/issues>,
+
+=item 2.
+
+or posting to the L</Community>.
+
+=back
 
 =head1 CREDIT
 
-This module is only possible because of Andy Wardley's mighty Template
-Toolkit. Thanks Andy. I will gladly give you half of any beers I
-receive for this work. (As long as you are in the same room when I'm
-drinking them ;)
+This project is based on Ingy dot Net's excellent L<Jemplate> project.
 
-=head1 AUTHORS
+=head1 AUTHOR
 
-Ingy döt Net <ingy@cpan.org>
+Yichun Zhang (agentzh), E<lt>agentzh@gmail.comE<gt>, CloudFlare Inc.
 
-(Note: I had to list myself first so that this line would go into META.yml)
+=head1 Copyright
 
-Lemplate is truly a community authored project:
+Copyright (C) 2016 Yichun Zhang (agentzh).  All Rights Reserved.
 
-Ingy döt Net <ingy@cpan.org>
+Copyright (C) 1996-2014 Andy Wardley.  All Rights Reserved.
 
-Tatsuhiko Miyagawa <miyagawa@bulknews.net>
+Copyright (c) 2006-2014. Ingy döt Net. All rights reserved.
 
-Yann Kerherve <yannk@cpan.org>
+Copyright (C) 1998-2000 Canon Research Centre Europe Ltd
 
-David Davis <xantus@xantus.org>
+This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
-Cory Bennett <coryb@corybennett.org>
+=head1 See Also
 
-Cees Hek <ceeshek@gmail.com>
+=over
 
-Christian Hansen
+=item *
 
-David A. Coffey <dacoffey@cogsmith.com>
+Perl TT2 Reference Manual: http://www.template-toolkit.org/docs/manual/index.html
 
-Robert Krimen <robertkrimen@gmail.com>
+=item *
 
-Nickolay Platonov <nickolay8@gmail.com>
+Jemplate for compiling TT2 templates to client-side JavaScript: http://www.jemplate.net/
 
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (c) 2006-2014. Ingy döt Net.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-See http://www.perl.com/perl/misc/Artistic.html
-
-=cut
+=back

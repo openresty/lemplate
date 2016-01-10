@@ -751,14 +751,14 @@ Lemplate::Directive - Lemplate Code Generating Backend
 
 Lemplate::Directive is the analog to Template::Directive, which is the
 module that produces that actual code that templates turn into. The
-Lemplate version obviously produces JavaScript code rather than Perl.
+Lemplate version obviously produces Lua code rather than Perl.
 Other than that the two modules are almost exactly the same.
 
 =head1 BUGS
 
 Unfortunately, some of the code generation seems to happen before
 Lemplate::Directive gets control. So it currently has heuristical code
-to rejigger Perl code snippets into JavaScript. This processing needs to
+to rejigger Perl code snippets into Lua. This processing needs to
 happen upstream once I get more clarity on how Template::Toolkit works.
 
 =head1 AUTHOR
@@ -766,6 +766,8 @@ happen upstream once I get more clarity on how Template::Toolkit works.
 Ingy döt Net <ingy@cpan.org>
 
 =head1 COPYRIGHT
+
+Copyright (c) 2016. Yichun Zhang (agentzh). All rights reserved.
 
 Copyright (c) 2006-2014. Ingy döt Net. All rights reserved.
 
