@@ -167,7 +167,7 @@ This project is based on Ingy dot Net's excellent [Jemplate](http://www.jemplate
 
 # AUTHOR
 
-Yichun Zhang (agentzh)
+Yichun Zhang (agentzh), &lt;agentzh@gmail.com&gt;, CloudFlare Inc.
 
 [Back to TOC](#table-of-contents)
 
