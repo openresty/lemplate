@@ -29,7 +29,7 @@ This is still under early development. Check back often.
 # Synopsis
 
     local templates = require "myapp.templates"
-    ngx.print(tempaltes.process("homepage.html", { var1 = 32, var2 = "foo" }))
+    ngx.print(tempaltes.process("homepage.tt2", { var1 = 32, var2 = "foo" }))
 
 From the command-line:
 
@@ -60,9 +60,9 @@ precompile your templates into a Lua module file. For example if you have
 a template directory called `templates` that contains:
 
     $ ls templates/
-    body.html
-    footer.html
-    header.html
+    body.tt2
+    footer.tt2
+    header.tt2
 
 You might run this command:
 
@@ -77,7 +77,7 @@ Now all you need to do is load the Lua module file in your OpenResty app:
 
 and do the HTML page rendering:
 
-    local results = templates.process("some-page.html",
+    local results = templates.process("some-page.tt2",
                                       { var1 = val1, var2 = val2, ...})
 
 Now you have Lemplate support for these templates in your OpenResty application.
@@ -90,7 +90,7 @@ The Lemplate Lua runtime module has the following API method:
 
 - process(template-name, data)
 
-    The `template-name` is a string like `'body.html'` that is the name of
+    The `template-name` is a string like `'body.tt2'` that is the name of
     the top level template that you wish to process.
 
     The optional `data` specifies the data object to be used by the
