@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pod2markdown lib/Lemplate.pm ReadMe.md
+markdown-toc.pl ReadMe.md
