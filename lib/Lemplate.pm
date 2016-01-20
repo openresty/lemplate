@@ -1,6 +1,8 @@
 # ToDo:
 # - Use TT:Simple in Makefiles
 
+# ABSTRACT: compiles Perl TT2 templates to standalone Lua modules for OpenResty
+
 package Lemplate;
 use strict;
 use warnings;
@@ -440,7 +442,7 @@ local math_floor = math.floor
 local table_maxn = table.maxn
 
 local _M = {
-    version = '0.01'
+    version = '0.02'
 }
 
 local template_map = {}

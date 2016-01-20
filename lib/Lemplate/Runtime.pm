@@ -2,6 +2,8 @@ package Lemplate::Runtime;
 use strict;
 use warnings;
 
+# VERSION
+
 sub main { return &kernel }
 sub kernel {
     <<'...';

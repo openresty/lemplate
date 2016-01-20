@@ -7,6 +7,8 @@ use lib 'lib';
 use Lemplate;
 #BOOTSTRAP-END
 
+# VERSION
+
 Lemplate->main(@ARGV);
 
 __END__

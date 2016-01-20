@@ -2,6 +2,8 @@ package Lemplate::Directive;
 use strict;
 use warnings;
 
+# VERSION
+
 our $OUTPUT = 'i = i + 1 output[i] =';
 our $WHILE_MAX = 1000;
 

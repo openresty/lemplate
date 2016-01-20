@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use base 'Template::Parser';
 
+# VERSION
+
 use Lemplate::Grammar;
 use Lemplate::Directive;
 
