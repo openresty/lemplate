@@ -13,3 +13,6 @@ t/check.js
 *.bak
 go
 a.lua
+html_out/
+ebooks.sh
+*.tags
