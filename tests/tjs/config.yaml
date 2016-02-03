@@ -1,9 +1,0 @@
-index_title: Jemplate Testing
-import_libs:
-  - js/Test/Jemplate.js
-  - runtime.js
-  - jt.js
-  - jt-greeting.js
-  - js/jemplate_dummy_plugin.js
-  - js/global.js
-templates: ../template
