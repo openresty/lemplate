@@ -495,7 +495,7 @@ local function stash_get(stash, k)
             if type(typ) == "table" then
                 local value = v[key]
                 if type(value) == "function" then
-                    return value()
+                    return value(unpack(typ))
                 end
                 if value then
                     return value
