@@ -442,7 +442,7 @@ local math_floor = math.floor
 local table_maxn = table.maxn
 
 local _M = {
-    version = '0.02'
+    version = '0.03'
 }
 
 local template_map = {}
