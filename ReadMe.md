@@ -2,26 +2,6 @@
 
 Lemplate - OpenResty/Lua template framework implementing Perl's TT2 templating language
 
-Table of Contents
-=================
-
-* [Name](#name)
-* [Status](#status)
-* [Synopsis](#synopsis)
-* [Description](#description)
-* [HowTo](#howto)
-* [Public API](#public-api)
-* [Current Support](#current-support)
-* [Community](#community)
-    * [English Mailing List](#english-mailing-list)
-    * [Chinese Mailing List](#chinese-mailing-list)
-* [Code Repository](#code-repository)
-* [Bugs and Patches](#bugs-and-patches)
-* [CREDIT](#credit)
-* [AUTHOR](#author)
-* [Copyright](#copyright)
-* [See Also](#see-also)
-
 # Status
 
 This is still under early development. Check back often.
@@ -50,8 +30,6 @@ templating language!
 
 Combined with OpenResty, Lemplate provides a really simple
 and powerful way to do web stuff.
-
-[Back to TOC](#table-of-contents)
 
 # HowTo
 
@@ -82,8 +60,6 @@ and do the HTML page rendering:
 
 Now you have Lemplate support for these templates in your OpenResty application.
 
-[Back to TOC](#table-of-contents)
-
 # Public API
 
 The Lemplate Lua runtime module has the following API method:
@@ -97,8 +73,6 @@ The Lemplate Lua runtime module has the following API method:
     templates. It can be an object, a function or a url. If it is an object,
     it is used directly. If it is a function, the function is called and the
     returned object is used.
-
-[Back to TOC](#table-of-contents)
 
 # Current Support
 
@@ -144,28 +118,20 @@ MANY of the standard filters are implemented.
 The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.
 
-[Back to TOC](#table-of-contents)
-
 # Community
 
 ## English Mailing List
 
 The [openresty-en](https://groups.google.com/group/openresty-en) mailing list is for English speakers.
 
-[Back to TOC](#table-of-contents)
-
 ## Chinese Mailing List
 
 The [openresty](https://groups.google.com/group/openresty) mailing list is for Chinese speakers.
-
-[Back to TOC](#table-of-contents)
 
 # Code Repository
 
 The bleeding edge code is available via Git at
 git://github.com/openresty/lemplate.git
-
-[Back to TOC](#table-of-contents)
 
 # Bugs and Patches
 
@@ -174,19 +140,13 @@ Please submit bug reports, wishlists, or patches by
 1. creating a ticket on the [GitHub Issue Tracker](https://github.com/openresty/lua-nginx-module/issues),
 2. or posting to the ["Community"](#community).
 
-[Back to TOC](#table-of-contents)
-
 # CREDIT
 
 This project is based on Ingy dot Net's excellent [Jemplate](https://metacpan.org/pod/Jemplate) project.
 
-[Back to TOC](#table-of-contents)
-
 # AUTHOR
 
 Yichun Zhang (agentzh), <agentzh@gmail.com>, CloudFlare Inc.
-
-[Back to TOC](#table-of-contents)
 
 # Copyright
 
@@ -200,12 +160,7 @@ Copyright (C) 1998-2000 Canon Research Centre Europe Ltd
 
 This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
-[Back to TOC](#table-of-contents)
-
 # See Also
 
 - Perl TT2 Reference Manual: http://www.template-toolkit.org/docs/manual/index.html
 - Jemplate for compiling TT2 templates to client-side JavaScript: http://www.jemplate.net/
-
-[Back to TOC](#table-of-contents)
-
