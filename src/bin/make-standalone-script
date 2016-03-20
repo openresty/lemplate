@@ -37,8 +37,6 @@ sub guts {
         Lemplate::Directive
         Lemplate::Grammar
         Lemplate::Parser
-        Lemplate::Runtime
-        Lemplate::Runtime::Compact
         Lemplate
     )) {
         $output .= get_module($_);
