@@ -6,8 +6,15 @@ use File::Temp qw( tempfile );
 use File::Copy qw( copy );
 use IPC::Run3 qw( run3 );
 use Lemplate;
+use ExtUtils::MakeMaker;
 
 our @EXPORT = qw( run_tests );
+
+sub can_run ($);
+
+if (!can_run("resty")) {
+    plan skip_all => "No \"resty\" utility found in PATH";
+}
 
 sub run_tests {
     for my $block (blocks()) {
@@ -133,6 +140,23 @@ sub run_test ($) {
             is $run_out, $expected_out, "$name - out expected";
         }
     }
+}
+
+# Check if we can run some command
+sub can_run ($) {
+    my ($cmd) = @_;
+
+    my $_cmd = $cmd;
+    return $_cmd if (-x $_cmd or $_cmd = MM->maybe_command($_cmd));
+
+    for my $dir ((split /$Config::Config{path_sep}/, $ENV{PATH}), '.') {
+            next if $dir eq '';
+            require File::Spec;
+            my $abs = File::Spec->catfile($dir, $cmd);
+            return $abs if (-x $abs or $abs = MM->maybe_command($abs));
+    }
+
+    return;
 }
 
 1;
