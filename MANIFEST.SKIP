@@ -1,0 +1,5 @@
+^html_out
+^ebooks\.sh$
+.*\.tags$
+^go$
+^a\.lua$
