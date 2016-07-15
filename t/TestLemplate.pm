@@ -90,8 +90,8 @@ sub run_test ($) {
 
     (my $luamod = $luafile) =~ s/\.lua$//;
 
-    my $define = $block->define // '';
-    my $init = $block->init // '';
+    my $define = $block->define || '';
+    my $init = $block->init || '';
 
     @cmd = ("resty", "-e", qq{$init ngx.print(require("$luamod").process("$tt2file", {$define}))});
     #warn "cmd: @cmd";
