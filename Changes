@@ -1,5 +1,9 @@
 Revision history for Perl extension Lemplate.
 
+0.05 2016-07-15
+* relaxed the minimum versions of our Perl dependency modules.
+* re-generate Lemplate::Grammar with the latest Parse::Yapp.
+
 0.03 2016-03-19
 * feature: added support for the foo.bar() TT2 language syntax.
 * bugfix: avoided generating nil values in stash_get() on the Lua land.
