@@ -730,11 +730,11 @@ This project is based on Ingy dot Net's excellent L<Jemplate> project.
 
 =head1 AUTHOR
 
-Yichun Zhang (agentzh), E<lt>agentzh@gmail.comE<gt>, CloudFlare Inc.
+Yichun Zhang (agentzh), E<lt>agentzh@gmail.comE<gt>, OpenResty Inc.
 
 =head1 Copyright
 
-Copyright (C) 2016 Yichun Zhang (agentzh).  All Rights Reserved.
+Copyright (C) 2016-2017 Yichun Zhang (agentzh).  All Rights Reserved.
 
 Copyright (C) 1996-2014 Andy Wardley.  All Rights Reserved.
 

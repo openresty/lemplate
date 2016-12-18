@@ -146,11 +146,11 @@ This project is based on Ingy dot Net's excellent [Jemplate](https://metacpan.or
 
 # AUTHOR
 
-Yichun Zhang (agentzh), <agentzh@gmail.com>, CloudFlare Inc.
+Yichun Zhang (agentzh), <agentzh@gmail.com>, OpenResty Inc.
 
 # Copyright
 
-Copyright (C) 2016 Yichun Zhang (agentzh).  All Rights Reserved.
+Copyright (C) 2016-2017 Yichun Zhang (agentzh).  All Rights Reserved.
 
 Copyright (C) 1996-2014 Andy Wardley.  All Rights Reserved.
 
