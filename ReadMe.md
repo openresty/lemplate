@@ -9,7 +9,7 @@ This is still under early development. Check back often.
 # Synopsis
 
     local templates = require "myapp.templates"
-    ngx.print(tempaltes.process("homepage.tt2", { var1 = 32, var2 = "foo" }))
+    ngx.print(templates.process("homepage.tt2", { var1 = 32, var2 = "foo" }))
 
 From the command-line:
 
