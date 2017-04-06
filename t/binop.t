@@ -29,7 +29,7 @@ yes
 [% IF yes %]
 yes
 [% ELSE %]
-no 
+no
 [% END %]
 
 --- define: yes = 1
@@ -43,7 +43,7 @@ yes
 [% IF yes %]
 yes
 [% ELSE %]
-no 
+no
 [% END %]
 
 --- define: yes = 1
@@ -57,7 +57,7 @@ yes
 [% IF yes and true %]
 yes
 [% ELSE %]
-no 
+no
 [% END %]
 
 --- define: yes = 1, ['true'] = 'this is true'
@@ -71,7 +71,7 @@ yes
 [% IF yes && true %]
 yes
 [% ELSE %]
-no 
+no
 [% END %]
 
 --- define: yes = 1, ['true'] = 'this is true'
@@ -85,7 +85,7 @@ yes
 [% IF yes && sad || happy %]
 yes
 [% ELSE %]
-no 
+no
 [% END %]
 
 --- define: yes = 1, sad = '', happy = 'yes'

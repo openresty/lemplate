@@ -58,7 +58,7 @@ this is block b
 
 === TEST 4: line 81
 --- tt2
-[% INCLUDE header 
+[% INCLUDE header
    title = 'A New Beginning'
 +%]
 A long time ago in a galaxy far, far away...
