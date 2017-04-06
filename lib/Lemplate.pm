@@ -615,18 +615,28 @@ _M.vmethods = {
     end,
 }
 
+_M.filters = {
+    html =
+        function(s, params)
+            s = gsub(s, "&", '&amp;', "jo")
+            s = gsub(s, "<", '&lt;', "jo");
+            s = gsub(s, ">", '&gt;', "jo");
+            s = gsub(s, '"', '&quot;', "jo"); -- " end quote for emacs
+            return s
+        end,
+}
+
 function _M.process(file, params)
     local stash = params
     local context = {
         stash = stash,
         filter = function (bits, name, params)
             local s = concat(bits)
-            if name == "html" then
-                s = gsub(s, "&", '&amp;', "jo")
-                s = gsub(s, "<", '&lt;', "jo");
-                s = gsub(s, ">", '&gt;', "jo");
-                s = gsub(s, '"', '&quot;', "jo"); -- " end quote for emacs
-                return s
+            local f = _M.filters[name]
+            if f then
+                return f(s, params)
+            else
+                return error("filter '" .. name .. "' not found")
             end
         end
     }
