@@ -8,12 +8,14 @@ This is still under early development. Check back often.
 
 # Synopsis
 
-    local templates = require "myapp.templates"
-    ngx.print(templates.process("homepage.tt2", { var1 = 32, var2 = "foo" }))
-
 From the command-line:
 
     lemplate --compile path/to/lemplate/directory/ > myapp/templates.lua
+
+From OpenRestyLua code:
+
+    local templates = require "myapp.templates"
+    ngx.print(templates.process("homepage.tt2", { var1 = 32, var2 = "foo" }))
 
 # Description
 
