@@ -485,46 +485,53 @@ end
 
 context_meta = { __index = context_meta }
 
-local function stash_get(stash, k)
-    local v
-    if type(k) == "table" then
-        v = stash
-        for i = 1, #k, 2 do
-            local key = k[i]
-            local typ = k[i + 1]
-            if type(typ) == "table" then
-                local value = v[key]
-                if type(value) == "function" then
-                    return value(unpack(typ))
-                end
-                if value then
-                    return value
-                end
-                if key == "size" then
-                    if type(v) == "table" then
-                        return #v
-                    else
-                        return 1
-                    end
-                else
+-- XXX debugging function:
+-- local function xxx(data)
+--     io.stderr:write("\n" .. require("cjson").encode(data) .. "\n")
+-- end
+
+local function stash_get(stash, expr)
+    local result
+
+    if type(expr) ~= "table" then
+        result = stash[expr]
+        if type(result) == "function" then
+            return result()
+        end
+        return result or ''
+    end
+
+    result = stash
+    for i = 1, #expr, 2 do
+        local key = expr[i]
+        if type(key) == "number" and key == math_floor(key) and key >= 0 then
+            key = key + 1
+        end
+        local val = result[key]
+        local args = expr[i + 1]
+        if args == 0 then
+            args = {}
+        end
+
+        if val == nil then
+            if not _M.vmethods[key] then
+                if type(expr[i + 1]) == "table" then
                     return error("virtual method " .. key .. " not supported")
                 end
-            end
-            if type(key) == "number" and key == math_floor(key) and key >= 0 then
-                key = key + 1
-            end
-            if type(v) ~= "table" then
                 return ''
             end
-            v = v[key]
+            val = _M.vmethods[key]
+            args = {result, unpack(args)}
         end
-    else
-        v = stash[k]
+
+        if type(val) == "function" then
+            val = val(unpack(args))
+        end
+
+        result = val
     end
-    if type(v) == "function" then
-        return v()
-    end
-    return v or ''
+
+    return result
 end
 
 local function stash_set(stash, k, v, default)
@@ -537,6 +544,76 @@ local function stash_set(stash, k, v, default)
         stash[k] = v
     end
 end
+
+_M.vmethods = {
+    join = function (list, delim)
+        delim = delim or ' '
+        local out = {}
+        local size = #list
+        for i = 1, size, 1 do
+            out[i * 2 - 1] = list[i]
+            if i ~= size then
+                out[i * 2] = delim
+            end
+        end
+        return concat(out)
+    end,
+
+    first = function (list)
+        return list[1]
+    end,
+
+    keys = function (list)
+        local out = {}
+        i = 1
+        for key in pairs(list) do
+            out[i] = key
+            i = i + 1
+        end
+        return out
+    end,
+
+    last = function (list)
+        return list[#list]
+    end,
+
+    push = function(list, elem)
+        list[#list + 1] = elem
+        return list
+    end,
+
+    size = function (list)
+        if type(list) == "table" then
+            return #value
+        else
+            return 1
+        end
+    end,
+
+    sort = function (list)
+        local out = { unpack(list) }
+        table.sort(out)
+        return out
+    end,
+
+    split = function (str, delim)
+        delim = delim or ' '
+        local out = {}
+	local start = 1
+	local sub = string.sub
+	local find = string.find
+	local sstart, send = find(str, delim, start)
+        local i = 1
+	while sstart do
+	    out[i] = sub(str, start, sstart-1)
+            i = i + 1
+	    start = send + 1
+	    sstart, send = find(str, delim, start)
+	end
+	out[i] = sub(str, start)
+	return out
+    end,
+}
 
 function _M.process(file, params)
     local stash = params
