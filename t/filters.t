@@ -12,37 +12,53 @@ __DATA__
 
 === TEST 1: html filter for >
 --- tt2
-[% "42 > 41" | html %] !!!
---- out
-42 &gt; 41 !!!
+[% "42 > 41" | html %]
+--- out chomp
+42 &gt; 41
 
 
 
 === TEST 2: html filter for &
 --- tt2
-[% "Jack & Jill" | html %] !!!
---- out
-Jack &amp; Jill !!!
+[% "Jack & Jill" | html %]
+--- out chomp
+Jack &amp; Jill
 
 
 
-=== TEST 3: custom filter (with no args)
+=== TEST 3: lower
 --- tt2
-[% "Jack & Jill" | upper %] !!!
---- out
-JACK & JILL !!!
+[% "Jack & Jill" | lower %]
+--- out chomp
+jack & jill
+
+
+
+=== TEST 4: upper
+--- tt2
+[% "Jack & Jill" | upper %]
+--- out chomp
+JACK & JILL
+
+
+
+=== TEST 5: custom filter (with no args)
+--- tt2
+[% "Jack & Jill" | period %]
+--- out chomp
+Jack & Jill.
 --- init
-require("%LUAMOD%").filters['upper'] = function(s)
-    return string.upper(s)
+require("%LUAMOD%").filters['period'] = function(s)
+    return s .. '.'
 end
 
 
 
-=== TEST 4: custom filter (with args)
+=== TEST 6: custom filter (with args)
 --- tt2
-[% "Jack & Jill" | quote('"') %] !!!
---- out
-"Jack & Jill" !!!
+[% "Jack & Jill" | quote('"') %]
+--- out chomp
+"Jack & Jill"
 --- init
 require("%LUAMOD%").filters['quote'] = function(s, a)
     return a[1] .. s .. a[1]

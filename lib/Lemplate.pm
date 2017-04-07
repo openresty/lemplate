@@ -616,14 +616,21 @@ _M.vmethods = {
 }
 
 _M.filters = {
-    html =
-        function(s, params)
-            s = gsub(s, "&", '&amp;', "jo")
-            s = gsub(s, "<", '&lt;', "jo");
-            s = gsub(s, ">", '&gt;', "jo");
-            s = gsub(s, '"', '&quot;', "jo"); -- " end quote for emacs
-            return s
-        end,
+    html = function (s, args)
+        s = gsub(s, "&", '&amp;', "jo")
+        s = gsub(s, "<", '&lt;', "jo");
+        s = gsub(s, ">", '&gt;', "jo");
+        s = gsub(s, '"', '&quot;', "jo"); -- " end quote for emacs
+        return s
+    end,
+
+    lower = function (s, args)
+        return string.lower(s)
+    end,
+
+    upper = function (s, args)
+        return string.upper(s)
+    end,
 }
 
 function _M.process(file, params)
