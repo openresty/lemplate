@@ -485,46 +485,42 @@ end
 
 context_meta = { __index = context_meta }
 
-local function stash_get(stash, k)
-    local v
-    if type(k) == "table" then
-        v = stash
-        for i = 1, #k, 2 do
-            local key = k[i]
-            local typ = k[i + 1]
-            if type(typ) == "table" then
-                local value = v[key]
+local function stash_get(stash, expr)
+    local result
+    if type(expr) == "table" then
+        result = stash
+        for i = 1, #expr, 2 do
+            local key = expr[i]
+            local args = expr[i + 1]
+            if type(args) == "table" then
+                local value = result[key]
                 if type(value) == "function" then
-                    return value(unpack(typ))
+                    return value(unpack(args))
                 end
                 if value then
                     return value
                 end
-                if key == "size" then
-                    if type(v) == "table" then
-                        return #v
-                    else
-                        return 1
-                    end
-                else
+                vmethod = _M.vmethods[key]
+                if vmethod == nil then
                     return error("virtual method " .. key .. " not supported")
                 end
+                return vmethod(result, unpack(args))
             end
             if type(key) == "number" and key == math_floor(key) and key >= 0 then
                 key = key + 1
             end
-            if type(v) ~= "table" then
+            if type(result) ~= "table" then
                 return ''
             end
-            v = v[key]
+            result = result[key]
         end
     else
-        v = stash[k]
+        result = stash[expr]
     end
-    if type(v) == "function" then
-        return v()
+    if type(result) == "function" then
+        return result()
     end
-    return v or ''
+    return result or ''
 end
 
 local function stash_set(stash, k, v, default)
@@ -537,6 +533,39 @@ local function stash_set(stash, k, v, default)
         stash[k] = v
     end
 end
+
+_M.vmethods = {
+    join = function(list, delim)
+        if delim == nil then
+            delim = ' '
+        end
+        local out = {}
+        for i = 1, #list, 1 do
+            table.insert(out, list[i])
+            if i ~= #list then
+                table.insert(out, delim)
+            end
+        end
+        return table.concat(out)
+    end,
+
+    first = function(list)
+        return list[1]
+    end,
+
+    push = function(list, elem)
+        table.insert(list, elem)
+        return list
+    end,
+
+    size = function(list)
+        if type(list) == "table" then
+            return #value
+        else
+            return 1
+        end
+    end,
+}
 
 function _M.process(file, params)
     local stash = params
