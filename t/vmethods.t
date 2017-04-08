@@ -66,3 +66,11 @@ Jack-Jill
 [% str = "Jack+Jill"; str.split('+').join('-') %]
 --- out chomp
 Jack-Jill
+
+
+
+=== TEST 8: sort
+--- tt2
+[% array = [ 'Jill', 'Jack' ]; array.sort().join('-') %]
+--- out chomp
+Jack-Jill

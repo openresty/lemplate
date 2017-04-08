@@ -485,13 +485,12 @@ end
 
 context_meta = { __index = context_meta }
 
--- XXX debugginf function:
-local function xxx(data)
-    io.stderr:write("\n" .. require("cjson").encode(data) .. "\n")
-end
+-- XXX debugging function:
+-- local function xxx(data)
+--     io.stderr:write("\n" .. require("cjson").encode(data) .. "\n")
+-- end
 
 local function stash_get(stash, expr)
-    -- xxx(expr)
     local result
 
     if type(expr) ~= "table" then
@@ -567,8 +566,8 @@ _M.vmethods = {
     keys = function (list)
         local out = {}
         i = 1
-        for pair in pairs(list) do
-            out[i] = pair
+        for key in pairs(list) do
+            out[i] = key
             i = i + 1
         end
         return out
@@ -591,6 +590,12 @@ _M.vmethods = {
         end
     end,
 
+    sort = function (list)
+        local out = { unpack(list) }
+        table.sort(out)
+        return out
+    end,
+
     split = function (str, delim)
         delim = delim or ' '
         local out = {}
@@ -598,14 +603,15 @@ _M.vmethods = {
 	local sub = string.sub
 	local find = string.find
 	local sstart, send = find(str, delim, start)
+        local i = 1
 	while sstart do
-	    table.insert( out, sub(str, start, sstart-1))
+	    out[i] = sub(str, start, sstart-1)
+            i = i + 1
 	    start = send + 1
 	    sstart, send = find(str, delim, start)
 	end
-	table.insert(out, sub(str, start))
+	out[i] = sub(str, start)
 	return out
-
     end,
 }
 
