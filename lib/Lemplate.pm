@@ -485,42 +485,54 @@ end
 
 context_meta = { __index = context_meta }
 
+-- XXX debugginf function:
+local function xxx(data)
+    io.stderr:write("\n" .. require("cjson").encode(data) .. "\n")
+end
+
 local function stash_get(stash, expr)
+    -- xxx(expr)
     local result
-    if type(expr) == "table" then
-        result = stash
-        for i = 1, #expr, 2 do
-            local key = expr[i]
-            local args = expr[i + 1]
-            if type(args) == "table" then
-                local value = result[key]
-                if type(value) == "function" then
-                    return value(unpack(args))
-                end
-                if value then
-                    return value
-                end
-                vmethod = _M.vmethods[key]
-                if vmethod == nil then
+
+    if type(expr) ~= "table" then
+        result = stash[expr]
+        if type(result) == "function" then
+            return result()
+        end
+        return result or ''
+    end
+
+    result = stash
+    for i = 1, #expr, 2 do
+        local key = expr[i]
+        if type(key) == "number" and key == math_floor(key) and key >= 0 then
+            key = key + 1
+        end
+        local val = result[key]
+        local args = expr[i + 1]
+        if args == 0 then
+            args = {}
+        end
+
+        if val == nil then
+            if not _M.vmethods[key] then
+                if type(expr[i + 1]) == "table" then
                     return error("virtual method " .. key .. " not supported")
                 end
-                return vmethod(result, unpack(args))
-            end
-            if type(key) == "number" and key == math_floor(key) and key >= 0 then
-                key = key + 1
-            end
-            if type(result) ~= "table" then
                 return ''
             end
-            result = result[key]
+            val = _M.vmethods[key]
+            args = {result, unpack(args)}
         end
-    else
-        result = stash[expr]
+
+        if type(val) == "function" then
+            val = val(unpack(args))
+        end
+
+        result = val
     end
-    if type(result) == "function" then
-        return result()
-    end
-    return result or ''
+
+    return result
 end
 
 local function stash_set(stash, k, v, default)
@@ -535,35 +547,65 @@ local function stash_set(stash, k, v, default)
 end
 
 _M.vmethods = {
-    join = function(list, delim)
-        if delim == nil then
-            delim = ' '
-        end
+    join = function (list, delim)
+        delim = delim or ' '
         local out = {}
-        for i = 1, #list, 1 do
-            table.insert(out, list[i])
-            if i ~= #list then
-                table.insert(out, delim)
+        local size = #list
+        for i = 1, size, 1 do
+            out[i * 2 - 1] = list[i]
+            if i ~= size then
+                out[i * 2] = delim
             end
         end
-        return table.concat(out)
+        return concat(out)
     end,
 
-    first = function(list)
+    first = function (list)
         return list[1]
     end,
 
+    keys = function (list)
+        local out = {}
+        i = 1
+        for pair in pairs(list) do
+            out[i] = pair
+            i = i + 1
+        end
+        return out
+    end,
+
+    last = function (list)
+        return list[#list]
+    end,
+
     push = function(list, elem)
-        table.insert(list, elem)
+        list[#list + 1] = elem
         return list
     end,
 
-    size = function(list)
+    size = function (list)
         if type(list) == "table" then
             return #value
         else
             return 1
         end
+    end,
+
+    split = function (str, delim)
+        delim = delim or ' '
+        local out = {}
+	local start = 1
+	local sub = string.sub
+	local find = string.find
+	local sstart, send = find(str, delim, start)
+	while sstart do
+	    table.insert( out, sub(str, start, sstart-1))
+	    start = send + 1
+	    sstart, send = find(str, delim, start)
+	end
+	table.insert(out, sub(str, start))
+	return out
+
     end,
 }
 
