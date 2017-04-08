@@ -642,9 +642,8 @@ function _M.process(file, params)
             local f = _M.filters[name]
             if f then
                 return f(s, params)
-            else
-                return error("filter '" .. name .. "' not found")
             end
+            return error("filter '" .. name .. "' not found")
         end
     }
     context = setmetatable(context, context_meta)
