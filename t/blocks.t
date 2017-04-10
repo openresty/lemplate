@@ -14,8 +14,8 @@ __DATA__
 --- tt2
 [% INCLUDE blockdef/block1 %]
 
---- lua_err
-file error - blockdef/block1: not found
+--- lua_err eval
+qr{^file error - blockdef/block1: not found\n}
 --- LAST
 
 
