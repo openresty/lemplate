@@ -577,8 +577,12 @@ _M.vmethods = {
         return list[#list]
     end,
 
-    push = function(list, elem)
-        list[#list + 1] = elem
+    push = function(list, ...)
+        local n = select("#", ...)
+        local m = #list
+        for i = 1, n do
+            list[m + i] = select(i, ...)
+        end
         return ''
     end,
 
