@@ -110,4 +110,3 @@ End of list
 foo<-[bar]->baz
 bar<-[baz]->qux
 baz<-[qux]
-

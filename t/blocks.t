@@ -53,4 +53,3 @@ file error - blockdef/none: not found
 
 --- out
 This is block 1, defined in blockdef, a is abstract
-
