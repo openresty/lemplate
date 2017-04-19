@@ -74,3 +74,11 @@ Jack-Jill
 [% array = [ 'Jill', 'Jack' ]; array.sort().join('-') %]
 --- out chomp
 Jack-Jill
+
+
+
+=== TEST 9: size
+--- tt2
+[% array = [ 'Jack', 'Jill' ]; array.size %]
+--- out chomp
+2

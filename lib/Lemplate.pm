@@ -584,7 +584,7 @@ _M.vmethods = {
 
     size = function (list)
         if type(list) == "table" then
-            return #value
+            return #list
         else
             return 1
         end
