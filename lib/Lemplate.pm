@@ -579,7 +579,7 @@ _M.vmethods = {
 
     push = function(list, elem)
         list[#list + 1] = elem
-        return list
+        return ''
     end,
 
     size = function (list)

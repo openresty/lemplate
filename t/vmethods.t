@@ -39,7 +39,8 @@ Jack-Jill
 
 === TEST 4: push
 --- tt2
-[% array = [ 'Jack', 'Jill' ]; array.push('Jump').join('-') %]
+[% array = [ 'Jack', 'Jill' ]; array.push('Jump') %]
+[% array.join('-') %]
 --- out chomp
 Jack-Jill-Jump
 
