@@ -8,17 +8,14 @@ perl:
 - 5.8
 
 install:
-- git clone --depth=1 --branch=master
-  git://github.com/ingydotnet/test-base-pm ../testml-pm
+- wget https://openresty.org/download/openresty-1.11.2.3rc1.tar.gz
+- tar -xf openresty-1.11.2.3rc1.tar.gz
+- cd openresty-1.11.2.3rc1/ && ./configure -j2 && make -j2 && sudo make install && cd ..
 - cpanm --quiet --notest
   File::Find::Rule
   Template
-  Spiffy
+  Test::Base
+  IPC::Run3
 
 script:
-  PERL5LIB=../testml-pm/lib
-  prove -lv t/
-- cover
-
-after_success:
-- cover -report coveralls
+- PATH="/usr/local/openresty/bin:$PATH" prove -j2 -Ilib -r t/
