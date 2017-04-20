@@ -82,7 +82,7 @@ array = function () return {40, 41, 42} end,
 
 === TEST 9: chaining keys
 --- tt2
-[% string.split().push(jump.uppercase).join('+') %]
+[% string.split().sort.join('+') %]
 [%# jump.uppercase %]
 --- init
 require("%LUAMOD%").vmethods['uppercase'] = function (s)
@@ -90,6 +90,5 @@ require("%LUAMOD%").vmethods['uppercase'] = function (s)
 end
 --- define
 string = function () return "Jack Jill" end,
-jump = function () return "jump" end,
 --- out chomp
-Jack+Jill+JUMP
+Jack+Jill
