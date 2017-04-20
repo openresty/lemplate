@@ -83,3 +83,12 @@ Jack-Jill
 [% array = [ 'Jack', 'Jill' ]; array.size %]
 --- out chomp
 2
+
+
+
+=== TEST 10: push multiple
+--- tt2
+[% array = [ 'Jack', 'Jill' ]; array.push('Jump', "Foo") %]
+[% array.join('-') %]
+--- out chomp
+Jack-Jill-Jump-Foo
