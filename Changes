@@ -1,5 +1,8 @@
 Revision history for Perl extension Lemplate.
 
+0.07 2016-07-15
+* added MANIFEST.SKIP to exclude unwanted files from packaging.
+
 0.05 2016-07-15
 * relaxed the minimum versions of our Perl dependency modules.
 * re-generate Lemplate::Grammar with the latest Parse::Yapp.

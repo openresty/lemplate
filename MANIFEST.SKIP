@@ -3,3 +3,8 @@
 .*\.tags$
 ^go$
 ^a\.lua$
+.*~$
+\.git/
+^\.travis\.yml$
+^tmp.*
+\.gitignore$

@@ -7,7 +7,7 @@ use lib 'lib';
 use Lemplate;
 #BOOTSTRAP-END
 
-# VERSION
+our $VERSION = $Lemplate::VERSION;
 
 Lemplate->main(@ARGV);
 

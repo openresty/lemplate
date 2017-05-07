@@ -14,7 +14,6 @@ install:
 - cpanm --quiet --notest
   File::Find::Rule
   Template
-  Test::Base
   IPC::Run3
 
 script:
