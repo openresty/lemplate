@@ -2,7 +2,7 @@ package Lemplate::Directive;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 our $OUTPUT = 'i = i + 1 output[i] =';
 our $WHILE_MAX = 1000;

@@ -1,5 +1,8 @@
 Revision history for Perl extension Lemplate.
 
+0.11 2017-05-07
+* refactor: removed useless lemplate's runtime code.
+
 0.10 2017-05-07
 * bugfix: forgot to install the lemplate script in Makefile.PL.
   this bug had appeared in 0.08.
