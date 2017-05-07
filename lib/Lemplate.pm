@@ -299,61 +299,7 @@ sub print_usage_and_exit {
 }
 
 sub runtime_source_code {
-    require Lemplate::Runtime;
-    require Lemplate::Runtime::Compact;
-
-    unshift @_, "standard" unless @_;
-
-    my ($runtime, $ajax, $json, $xhr, $xxx, $compact) = map { defined $_ ? lc $_ : "" } @_[0 .. 5];
-
-    my $Lemplate_Runtime = $compact ? "Lemplate::Runtime::Compact" : "Lemplate::Runtime";
-
-    if ($runtime eq "standard") {
-        $ajax ||= "xhr";
-        $json ||= "json2";
-        $xhr ||= "ilinsky";
-    }
-    elsif ($runtime eq "jquery") {
-        $ajax ||= "jquery";
-    }
-    elsif ($runtime eq "yui") {
-        $ajax ||= "yui";
-        $json ||= "yui";
-    }
-    elsif ($runtime eq "legacy") {
-        $ajax ||= "xhr";
-        $json ||= "json2";
-        $xhr ||= "gregory";
-        $xxx = 1;
-    }
-    elsif ($runtime eq "lite") {
-    }
-
-    $ajax = "xhr" if $ajax eq 1;
-    $xhr ||= 1 if $ajax eq "xhr";
-    $json = "json2" if $json eq 1;
-    $xhr = "ilinsky" if $xhr eq 1;
-
-    my @runtime;
-
-    push @runtime, $Lemplate_Runtime->kernel if $runtime;
-
-    push @runtime, $Lemplate_Runtime->json2 if $json =~ m/^json2?$/i;
-
-    push @runtime, $Lemplate_Runtime->ajax_xhr if $ajax eq "xhr";
-    push @runtime, $Lemplate_Runtime->ajax_jquery if $ajax eq "jquery";
-    push @runtime, $Lemplate_Runtime->ajax_yui if $ajax eq "yui";
-
-    push @runtime, $Lemplate_Runtime->json_json2 if $json =~ m/^json2?$/i;
-    push @runtime, $Lemplate_Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
-    push @runtime, $Lemplate_Runtime->json_yui if $json eq "yui";
-
-    push @runtime, $Lemplate_Runtime->xhr_ilinsky if $xhr eq "ilinsky";
-    push @runtime, $Lemplate_Runtime->xhr_gregory if $xhr eq "gregory";
-
-    push @runtime, $Lemplate_Runtime->xxx if $xxx;
-
-    return join ";", @runtime;
+    die "generating a separate runtime not supported yet";
 }
 
 #-------------------------------------------------------------------------------

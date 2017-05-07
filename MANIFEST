@@ -28,7 +28,6 @@ lib/Lemplate.pm
 lib/Lemplate/Directive.pm
 lib/Lemplate/Grammar.pm
 lib/Lemplate/Parser.pm
-lib/Lemplate/Runtime/Compact.pm
 Makefile
 Makefile.PL
 MANIFEST
