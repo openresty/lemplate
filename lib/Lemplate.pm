@@ -676,8 +676,14 @@ This is still under early development. Check back often.
 
 =head1 Synopsis
 
+From the command-line:
+
+    lemplate --compile path/to/lemplate/directory/ > myapp/templates.lua
+
+From OpenResty Lua code:
+
     local templates = require "myapp.templates"
-    ngx.print(tempaltes.process("homepage.tt2", { var1 = 32, var2 = "foo" }))
+    ngx.print(templates.process("homepage.tt2", { var1 = 32, var2 = "foo" }))
 
 From the command-line:
 
@@ -688,22 +694,21 @@ From the command-line:
 Lemplate is a templating framework for OpenResty/Lua that is built over
 Perl's Template Toolkit (TT2).
 
-Lemplate parses TT2 templates using the TT2 Perl framework, but with a
-twist. Instead of compiling the templates into Perl code, it compiles
-them into Lua that can run on OpenResty.
+Lemplate parses TT2 templates using the TT2 Perl framework, but with a twist.
+Instead of compiling the templates into Perl code, it compiles them into Lua
+that can run on OpenResty.
 
-Lemplate then provides a Lua runtime module for processing
-the template code. Presto, we have full featured Lua
-templating language!
+Lemplate then provides a Lua runtime module for processing the template code.
+Presto, we have full featured Lua templating language!
 
-Combined with OpenResty, Lemplate provides a really simple
-and powerful way to do web stuff.
+Combined with OpenResty, Lemplate provides a really simple and powerful way to
+do web stuff.
 
 =head1 HowTo
 
 Lemplate comes with a command line tool call C<lemplate> that you use to
-precompile your templates into a Lua module file. For example if you have
-a template directory called C<templates> that contains:
+precompile your templates into a Lua module file. For example if you have a
+template directory called F<templates> that contains:
 
     $ ls templates/
     body.tt2
@@ -821,11 +826,11 @@ or posting to the L</Community>.
 
 =back
 
-=head1 CREDIT
+=head1 Credit
 
 This project is based on Ingy dot Net's excellent L<Jemplate> project.
 
-=head1 AUTHOR
+=head1 Author
 
 Yichun Zhang (agentzh), E<lt>agentzh@gmail.comE<gt>, OpenResty Inc.
 
@@ -839,7 +844,8 @@ Copyright (c) 2006-2014. Ingy döt Net. All rights reserved.
 
 Copyright (C) 1998-2000 Canon Research Centre Europe Ltd
 
-This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
+This module is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =head1 See Also
 
