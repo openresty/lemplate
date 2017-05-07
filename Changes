@@ -1,5 +1,21 @@
 Revision history for Perl extension Lemplate.
 
+0.08 2017-05-06
+* feature: added more vmethods to Lemplate.
+    * rewrote stash_get and implemented methods push, keys, split and join.
+    * added a sort vmethod.
+    * updated lempate script with new vmethod features.
+
+* feature: support custom lua TT filters. Example:
+
+    lemplate = require('my.templates')
+    lemplate.filters['upper'] = function(str, args)
+        return string.upper(str)
+    end
+    lemplate.process('[% "i like pie" | upper %]')
+
+* feature: added 2 more standard filters: upper and lower.
+
 0.07 2016-07-15
 * added MANIFEST.SKIP to exclude unwanted files from packaging.
 

@@ -9,7 +9,7 @@ use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use Lemplate::Parser;
 
