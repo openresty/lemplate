@@ -1,5 +1,9 @@
 Revision history for Perl extension Lemplate.
 
+0.10 2017-05-07
+* bugfix: forgot to install the lemplate script in Makefile.PL.
+  this bug had appeared in 0.08.
+
 0.09 2017-05-06
 * bugfix: added version numbers to Lemplate::Parser and Lemplate::Directive.
 

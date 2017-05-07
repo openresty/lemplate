@@ -7,7 +7,7 @@ use lib 'lib';
 use Lemplate;
 #BOOTSTRAP-END
 
-our $VERSION = $Lemplate::VERSION;
+our $VERSION = '0.10';
 
 Lemplate->main(@ARGV);
 
@@ -39,7 +39,7 @@ Where C<--runtime> and C<runtime-opt> can include:
     --json=json2        Include http://www.json.org/json2.js for parsing/stringifying
     --json=yui          Use YUI: YAHOO.lang.JSON (requires external YUI)
     --json=none         Doesn't provide any JSON functionality except a warning
-    
+
     --ajax              By itself, equivalent to --ajax=xhr
     --ajax=jquery       Use jQuery for Ajax get and post (requires external jQuery)
     --ajax=yui          Use YUI: yui/connection/connection.js (requires external YUI)

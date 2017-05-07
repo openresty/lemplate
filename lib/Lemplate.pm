@@ -4,12 +4,13 @@
 # ABSTRACT: compiles Perl TT2 templates to standalone Lua modules for OpenResty
 
 package Lemplate;
+
 use strict;
 use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 use Lemplate::Parser;
 

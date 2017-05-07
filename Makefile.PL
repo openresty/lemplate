@@ -8,6 +8,8 @@ perl_version    ('5.010001');
 repository      ('https://github.com/openresty/test-nginx');
 all_from        ('lib/Lemplate.pm');
 
+install_script  ("./lemplate");
+
 requires        ('Template' => 2.14);
 requires        ('File::Find::Rule');
 build_requires  ('IPC::Run3');
