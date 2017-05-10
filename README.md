@@ -114,29 +114,20 @@ Lemplate now supports almost all the TT directives, including:
 
     * Plain text
     * [% [GET] variable %]
-    * [% CALL variable %]
     * [% [SET] variable = value %]
     * [% DEFAULT variable = value ... %]
     * [% INCLUDE [arguments] %]
     * [% PROCESS [arguments] %]
     * [% BLOCK name %]
-    * [% FILTER filter %] text... [% END %]
-    * [% WRAPPER template [variable = value ...] %]
     * [% IF condition %]
     * [% ELSIF condition %]
     * [% ELSE %]
-    * [% SWITCH variable %]
-    * [% CASE [{value|DEFAULT}] %]
     * [% FOR x = y %]
+    * [% FOR x IN y %]
     * [% WHILE expression %]
-    * [% RETURN %]
-    * [% THROW type message %]
-    * [% STOP %]
     * [% NEXT %]
     * [% LAST %]
-    * [% CLEAR %]
     * [%# this is a comment %]
-    * [% MACRO name(param1, param2) BLOCK %] ... [% END %]
 
 ALL of the string virtual functions are supported.
 
