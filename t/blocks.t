@@ -15,7 +15,7 @@ __DATA__
 [% INCLUDE blockdef/block1 %]
 
 --- lua_err eval
-qr{^file error - blockdef/block1: not found\n}
+qr{file error - blockdef/block1: not found\n}
 --- LAST
 
 
