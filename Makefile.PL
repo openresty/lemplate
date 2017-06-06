@@ -5,7 +5,7 @@ use inc::Module::Install;
 name            ('Lemplate');
 license         ('artistc');
 perl_version    ('5.010001');
-repository      ('https://github.com/openresty/test-nginx');
+repository      ('https://github.com/openresty/lemplate');
 all_from        ('lib/Lemplate.pm');
 
 install_script  ("./lemplate");
