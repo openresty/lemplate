@@ -28,13 +28,10 @@ lib/Lemplate.pm
 lib/Lemplate/Directive.pm
 lib/Lemplate/Grammar.pm
 lib/Lemplate/Parser.pm
-Makefile
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 META.yml
-MYMETA.json
-MYMETA.yml
 note/Design
 note/ToDo
 README.md

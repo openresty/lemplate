@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base 'Template::Parser';
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use Lemplate::Grammar;
 use Lemplate::Directive;
