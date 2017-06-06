@@ -1,5 +1,8 @@
 Revision history for Perl extension Lemplate.
 
+0.14 2017-06-06
+* fixed the repository link in Makefile.PL.
+
 0.13 2017-06-06
 * excluded files that should not be bundled in the release tarball.
 
