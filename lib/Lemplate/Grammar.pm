@@ -37,7 +37,7 @@ require 5.004;
 use strict;
 use vars qw( $VERSION );
 
-$VERSION  = '0.14';
+$VERSION  = '0.15';
 
 my (@RESERVED, %CMPOP, $LEXTABLE, $RULES, $STATES);
 my ($factory, $rawstart);

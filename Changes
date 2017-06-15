@@ -1,5 +1,8 @@
 Revision history for Perl extension Lemplate.
 
+0.15 2017-06-15
+* bugfix: squelched a warning from Text::Glob for some users.
+
 0.14 2017-06-06
 * fixed the repository link in Makefile.PL.
 

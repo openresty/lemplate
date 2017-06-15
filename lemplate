@@ -10413,7 +10413,7 @@ package Lemplate::Directive;
 use strict;
 use warnings;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 our $OUTPUT = 'i = i + 1 output[i] =';
 our $WHILE_MAX = 1000;
@@ -11048,7 +11048,7 @@ require 5.004;
 use strict;
 use vars qw( $VERSION );
 
-$VERSION  = '0.14';
+$VERSION  = '0.15';
 
 my (@RESERVED, %CMPOP, $LEXTABLE, $RULES, $STATES);
 my ($factory, $rawstart);
@@ -17106,7 +17106,7 @@ use strict;
 use warnings;
 use base 'Template::Parser';
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 use Lemplate::Grammar;
 use Lemplate::Directive;
@@ -17151,7 +17151,7 @@ use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 use Lemplate::Parser;
 
