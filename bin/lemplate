@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 
+# Fix a bug where Text::Glob causes a warning.
+{
+    package Text::Glob;
+    no warnings 'once';
+}
+
 #BOOTSTRAP-BEGIN
 # This section of code will be replaced by lots of inline Perl modules
 # to make the standalone lemplate script.
