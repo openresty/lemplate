@@ -12,3 +12,5 @@ blib/
 ^Makefile$
 ^MYMETA\.
 update-ver
+^META\.yml$
+^reindex$

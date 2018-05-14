@@ -31,11 +31,9 @@ lib/Lemplate/Parser.pm
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
-META.yml
 note/Design
 note/ToDo
 README.md
-reindex
 src/bin/make-standalone-script
 src/bin/tpage
 src/Makefile
