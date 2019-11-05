@@ -17651,7 +17651,7 @@ _M.vmethods = {
 
     keys = function (list)
         local out = {}
-        i = 1
+        local i = 1
         for key in pairs(list) do
             out[i] = key
             i = i + 1
